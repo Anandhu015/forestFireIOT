@@ -1,0 +1,291 @@
+{% extends "base.html"%}
+
+{% load static %}
+
+{% block content %}
+<head>
+    <title>Master node reading</title>
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+<link rel="stylesheet" href="{% static 'css/leaflet.awesome-markers.css' %}">
+
+
+
+<!-- <link href="https://fonts.googleleapis.com/css2?family=Poppins:wght@700display=swap" rel="stylesheet"/> -->
+
+<style>
+    body{
+        background-image: url("{% static 'img/forest.jpg' %}");
+    }
+   
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"/>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/gauge.css' %}" />
+<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+<!-- leaflet map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+<link rel="stylesheet" href="{% static 'css/leaflet-routing-machine.css'%}" />
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+<script src="{% static 'js/leaflet-routing-machine.js' %}"></script>
+
+</head>
+<body>
+    
+    <h1 class="heading">Master Node</h1>
+    <table style="margin:auto">
+        <tr>
+            <td style="padding-right:10px;padding-bottom: 10px;">
+                <h4>device Status: </h4>
+            </td>
+            <td>
+                <center>
+    
+                
+                    <label class="toggle">
+                        <input type="checkbox" disabled  id="checkbox1">
+                        <span class="slider"></span>
+                        <span class="labels" id="on" data-on="ON" data-off="OFF" ></span>
+                      </label>
+                    
+                    
+                   
+                   
+                    
+               </center>
+            </td>
+        </tr>
+    </table>
+    
+            <!-- Button to Open the Modal -->
+            <div class="ntn">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                    View Device
+                  </button>
+            </div>
+            
+          
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+              <div class="modal-dialog" style="margin-left:340px">
+                <div class="modal-content" style="width:800px;">
+                
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">device Location</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  
+                  <!-- Modal body -->
+                  <div class="modal-body" style="width:510px;height:530px;">
+                    <div id="map" class="map"></div>
+                    <!-- routing -->
+                    
+                    
+                    <br>
+                    <!-- links !-->
+                    
+                    
+                    <!-- custom script!-->
+                    <script>
+                    //MAP
+                    var marker, l, lat, lon, loc= [["MASTER-NODE",9.305057109396975,77.07870483398439],["SUB-NODE",9.30230430693122,77.08479881286623],["Fire Alert facility",9.3168764, 77.1422926]];
+                    
+                    var mymap = L.map('map', {
+                        center: [9.335861618302411, 77.11815261631273],
+                        zoom: 13,
+                        
+                    });
+                    marker=L.marker([loc[1][1],loc[1][2]]).addTo(mymap).bindPopup("<b>Sub-Node</b><br>"+"Latitude:"+loc[1][1]+"<br>Longitude:"+loc[1][2]);
+                    marker1=L.marker([loc[0][1],loc[0][2]]).addTo(mymap).bindPopup("<b>Master-Node</b><br>"+"Latitude:"+loc[1][1]+"<br>Longitude:"+loc[1][2]);
+                    marker2=L.marker([loc[2][1],loc[2][2]]).addTo(mymap).bindPopup("<b>Fire Alert Facility</b><br>"+"Latitude:"+loc[2][1]+"<br>Longitude:"+loc[2][2]);
+                   
+                    $('#myModal').on('show.bs.modal', function () {
+                            setTimeout(function () {
+                                mymap.invalidateSize();
+                            }, 10);
+                        });
+                    
+            
+                     googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+                                     maxZoom: 20,
+                                     subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+                                }).addTo(mymap);
+                                
+                                
+                                   
+                                        L.Routing.control({
+
+                                                waypoints: [
+                                                    L.latLng([loc[2][1],loc[2][2]]),
+                                                    L.latLng([loc[0][1],loc[0][2]])
+                                                ],
+                                                draggableWaypoints:false,
+                                                fitSelectedRoutes:false,
+                                                createMarker: function() { return null; },
+                                                lineOptions: {
+                                                addWaypoints: false
+                                            }
+                                                                      }).addTo(mymap);
+                                        
+
+                                
+                                    
+                   
+                        
+                      
+                    
+                    
+                
+            
+                    
+                    </script>
+                    
+                  </div>
+                  
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+        <div class="temp" style=" height: 400px;
+        width:400px;
+        background-color: #ffffff;
+        position: absolute;
+        transform: translate(-50%,-50%);
+        top: 50%;
+        left: 50%;
+        border-radius: 8px;
+        box-shadow: 20px 20px 40px rgba(60,60,150,0.25);
+        display: grid;
+        place-items: center;
+    ">
+            <h1 style="font-family:Poppins,sans-serif;font-size:large;">Temperature Reading(in degree celcius)</h1>
+            <div class="circular-progress">
+                <div class="value-container"></div>
+            </div>
+        </div>
+        <div class="container-one">
+            <h1 style="font-family:Poppins,sans-serif;font-size:large;">Humidity Reading(in g/m3)</h1>
+            <div class="circular-progress-one">
+                <div class="value-container-one"></div>
+            </div>
+        </div>
+        <div class="container-two">
+            <h1 style="font-family:Poppins,sans-serif;font-size:large;">Smoke Reading(in percentage)</h1>
+            <div class="circular-progress-two">
+                <div class="value-container-two"></div>
+            </div>
+        </div>
+
+        
+        
+    
+    
+    
+    <script>
+        var smoke,temp,hum;
+         $(document).ready(function () {
+                        setInterval(function(){
+                            $.ajax({
+                            url:"{% url 'sensor' %}",
+                            dataType: 'json',
+                            success: function (data) {
+                                // storing json data in variables
+                                
+                                     hum=data.obj.hum,
+                                     temp=data.obj.temp;
+                                     smoke=data.obj.smoke;
+                                     status=data.obj.status;
+                                     
+                                    if(status){
+                                    
+                                        var checkbox1=document.getElementById("checkbox1")
+                                        checkbox1.checked=1;
+                                       
+                                    }
+                                    else{
+                                        c=false;
+                                        var checkbox1=document.getElementById("checkbox1")
+                                        checkbox1.checked=0;
+                                       
+                                    }
+                                    
+                                    let progressbar = document.querySelector(".circular-progress");
+                                    let valueContainer = document.querySelector(".value-container");
+
+                                    let progressValue = 0;
+                                    let progressEndValue = temp;
+                                    console.log(progressEndValue)
+                                    let speed = 0;
+                                    let progress = setInterval(() => {
+                                        progressValue++;
+                                    
+                                        valueContainer.textContent = `${progressEndValue}°C`;
+                                        progressbar.style.background = `conic-gradient(
+                                        #4d5bf9 ${progressValue * 3.6}deg ,
+                                        #cadcff ${progressValue * 3.6}deg
+                                    )`;
+                                        if (progressValue == parseInt(progressEndValue)) {
+                                            clearInterval(progress);
+                                        }
+                                    },speed)
+                                    let progressbarone = document.querySelector(".circular-progress-one");
+                                    let valueContainerone = document.querySelector(".value-container-one");
+                                    let progressValue1 = 0;
+                                    let progressEndValue1 =hum;
+
+                                    let speed1 = 0;
+                                    let progress1 = setInterval(() => {
+                                        progressValue1++;
+                                        valueContainerone.textContent = `${progressEndValue1}`;
+                                        progressbarone.style.background = `conic-gradient(
+                                        #FF0000 ${progressValue1 * 3.6}deg ,
+                                        #cadcff ${progressValue1 * 3.6}deg
+                                    )`;
+                                        if (progressValue1 == progressEndValue1) {
+                                            clearInterval(progress1);
+                                        }
+                                    },speed1);
+                                    let progressbartwo = document.querySelector(".circular-progress-two");
+                                    let valueContainertwo = document.querySelector(".value-container-two");
+                                    let progressValue2 = 0;
+                                    let progressEndValue2 =smoke/100;
+
+                                    let speed2 = 0;
+                                    let progress2 = setInterval(() => {
+                                        progressValue2++;
+                                    
+
+                                        valueContainertwo.textContent = `${progressEndValue2}%`;
+                                        progressbartwo.style.background = `conic-gradient(
+                                        #00FF00 ${progressValue2 * 3.6}deg ,
+                                        #cadcff ${progressValue2 * 3.6}deg
+                                    )`;
+                                        if (progressValue2 == parseInt(progressEndValue2)) {
+                                            clearInterval(progress2);
+                                        }
+                                    },speed2);
+                                
+                                
+                             
+                
+                
+                            },
+                            error: function () {
+                                alert("error receiving  data from server");
+                            }
+                        });
+                    },5000)
+                });
+    </script> 
+   
+</body>
+{% endblock %}

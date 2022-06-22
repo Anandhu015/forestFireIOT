@@ -1,0 +1,145 @@
+#map{
+    height:500px;
+    width: 765px;
+    position: relative;
+}
+.formclass{
+    height: 400px;
+    background-color: rgb(217, 124, 3);
+    border: 1px red;
+    position: absolute;
+    top:10px;
+    left: 10px;
+    padding: 10px;
+    z-index: 999;
+    box-shadow: 0 1px 5px rgba(0, 0,0,0,65);
+
+}
+.input{
+    padding: 10px;
+    width: 20%;
+    border: 1px red;
+    font-size: 15px;
+    border-radius: 3px;
+}
+#form{
+    padding: 0;
+    margin: 0;
+
+}
+input:nth-child(1){
+    margin-bottom: 10px;
+}
+.leaflet-top .leaflet-control{
+    margin-top: 180px;
+}
+.bt1 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #4CAF50;
+    border-radius: 20px;
+  }
+.bt1:hover{
+        background-color: #4CAF50;
+        color: white;
+}
+.bt2 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #bd0c0c;
+    border-radius: 20px;
+  }
+.bt2:hover{
+        background-color: #bd0c0c;
+        color: white;
+}
+
+/*toggle style*/
+
+.toggle {
+    --width: 80px;
+    --height: calc(var(--width) / 3);
+
+    position: relative;
+    display: inline-block;
+    width: var(--width);
+    height: var(--height);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+    border-radius: var(--height);
+    cursor: pointer;
+  }
+
+  .toggle input {
+    display: none;
+  }
+
+  .toggle .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--height);
+    background-color: rgb(245, 9, 9);
+    transition: all 0.4s ease-in-out;
+  }
+
+  .toggle .slider::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(var(--height));
+    height: calc(var(--height));
+    border-radius: calc(var(--height) / 2);
+    background-color: #fff;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease-in-out;
+  }
+
+  .toggle input:checked+.slider {
+    background-color: #0bff07;
+  }
+
+  .toggle input:checked+.slider::before {
+    transform: translateX(calc(var(--width) - var(--height)));
+  }
+
+  .toggle .labels {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    font-family: sans-serif;
+    transition: all 0.4s ease-in-out;
+  }
+
+  .toggle .labels::after {
+    content: attr(data-off);
+    position: absolute;
+    right: 5px;
+    color: #ffffff;
+    opacity: 1;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s ease-in-out;
+  }
+
+  .toggle .labels::before {
+    content: attr(data-on);
+    position: absolute;
+    left: 5px;
+    color: #ffffff;
+    opacity: 0;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.4);
+    transition: all 0.4s ease-in-out;
+  }
+
+  .toggle input:checked~.labels::after {
+    opacity: 0;
+  }
+
+  .toggle input:checked~.labels::before {
+    opacity: 1;
+  }

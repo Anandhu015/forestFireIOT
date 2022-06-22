@@ -1,0 +1,69 @@
+<style>
+
+table, th, td {
+        border: 1px solid black;
+        
+      }
+      table.center {
+        margin-left: auto; 
+        margin-right: auto;
+        width: 50%;
+        height: 200px;
+        font-size: larger;
+      }
+</style>
+<table class="center" >
+    <tr>
+      <th>device id</th>
+      <td id="id"></td>
+      <td id="id1"></td> 
+    </tr>
+    <tr>
+        <th>temperature reading</th>
+        <td id="temp"></td>
+        <td id="temp1"></td>
+    </tr>
+    <tr>
+        <th>humidity reading</th>
+        <td id="hum"></td>
+        <td id="hum1"></td>
+    </tr>
+    <tr>
+        <th>gas reading</th>
+        <td>not connected</td>
+        <td id="gas1"></td>
+
+    </tr>
+  </table>
+ 
+ 
+
+
+
+
+
+
+<script>var id="{{obj.device_id}}"
+var temperature="{{obj.temp_reading}}"
+var humidity="{{obj.hum_reading}}"
+var id1="{{obj1.device_id1}}"
+var temperature1="{{obj1.temp_reading1}}"
+var humidity1="{{obj1.hum_reading1}}"
+var gas_analog1="{{obj1.gas_analog_reading1}}"
+
+document.getElementById("id").innerHTML=id;
+document.getElementById("temp").innerHTML=temperature;
+document.getElementById("hum").innerHTML=humidity;
+document.getElementById("id1").innerHTML=id1;
+document.getElementById("temp1").innerHTML=temperature1;
+document.getElementById("hum1").innerHTML=humidity1;
+document.getElementById("gas1").innerHTML=gas_analog1;
+//auto reload page for every 30 seconds
+
+/*window.setTimeout(function(){
+    window.location.reload();
+},5000);
+console.log("hello"+e)*/
+</script>
+
+</h4>
