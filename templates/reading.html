@@ -18,6 +18,58 @@
     body{
         background-image: url("{% static 'img/forest.jpg' %}");
     }
+    #loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+ 
+  margin: -76px 0 0 -76px;
+  border: 14px solid #f3f3f3;
+  border-radius: 10%;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-left: 16px solid yellow;
+  width: 70px;
+  height: 70px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 1s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
    
 </style>
 
@@ -34,13 +86,20 @@
 <script src="{% static 'js/leaflet-routing-machine.js' %}"></script>
 
 </head>
+
 <body>
+
+    <h3 id="hello" style="margin-top:370px;margin-left: 590px;">loading please wait...</h3>
+    <body onload="myFunction()" style="margin:0;">
+        <div id="loader"></div>
+    
+        <div style="display:none;" id="myDiv" class="animate-bottom">
     
     <h1 class="heading">Master Node</h1>
     <table style="margin:auto">
         <tr>
             <td style="padding-right:10px;padding-bottom: 10px;">
-                <h4>device Status: </h4>
+                <h4>device status: </h4>
             </td>
             <td>
                 <center>
@@ -49,7 +108,8 @@
                     <label class="toggle">
                         <input type="checkbox" disabled  id="checkbox1">
                         <span class="slider"></span>
-                        <span class="labels" id="on" data-on="ON" data-off="OFF" ></span>
+                        <span class="labels" id="button" data-on="ON" data-off="OFF" ></span>
+    
                       </label>
                     
                     
@@ -60,10 +120,11 @@
             </td>
         </tr>
     </table>
+   
     
             <!-- Button to Open the Modal -->
             <div class="ntn">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                <button type="button" class="btn btn-primary" style="margin-right:700px;" data-toggle="modal" data-target="#myModal">
                     View Device
                   </button>
             </div>
@@ -161,6 +222,7 @@
         position: absolute;
         transform: translate(-50%,-50%);
         top: 50%;
+        margin-top: 20px;
         left: 50%;
         border-radius: 8px;
         box-shadow: 20px 20px 40px rgba(60,60,150,0.25);
@@ -204,17 +266,22 @@
                                      temp=data.obj.temp;
                                      smoke=data.obj.smoke;
                                      status=data.obj.status;
+                                  
                                      
-                                    if(status){
-                                    
-                                        var checkbox1=document.getElementById("checkbox1")
-                                        checkbox1.checked=1;
+                                     
+                                    if(status==='true'){
+                                        
+                                        console.log("hello")
+                                        $('#checkbox1').prop('checked',true);
+                                        
                                        
                                     }
                                     else{
-                                        c=false;
-                                        var checkbox1=document.getElementById("checkbox1")
-                                        checkbox1.checked=0;
+                                        
+                                        $('#checkbox1').prop('checked',false);
+                                       console.log("here")
+                                       
+                                        
                                        
                                     }
                                     
@@ -285,8 +352,19 @@
                                 alert("error receiving  data from server");
                             }
                         });
-                    },5000)
+                    },2000)
                 });
+                var myVar;
+
+                function myFunction() {
+                    myVar = setTimeout(showPage, 2000);
+                }
+
+                function showPage() {
+                        document.getElementById("loader").style.display = "none";
+                        document.getElementById("myDiv").style.display = "block";
+                        document.getElementById("hello").style.display = "none";
+                }
     </script> 
    
 </body>

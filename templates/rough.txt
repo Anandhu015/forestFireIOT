@@ -67,3 +67,12 @@ console.log("hello"+e)*/
 </script>
 
 </h4>
+
+ $(function() {
+                                         $('#toggle').bootstrapToggle({
+                                            on: 'on',
+                                            
+                                            off: 'off'
+                                            });
+                                        })
+<input type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="on" data-off="off">

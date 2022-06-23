@@ -15,6 +15,63 @@
     body{
         background-image: url("{% static 'img/forest.jpg' %}");
     }
+    /* Center the loader */
+#loader {
+    position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+ 
+  margin: -76px 0 0 -76px;
+  border: 14px solid #f3f3f3;
+  border-radius: 10%;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-left: 16px solid yellow;
+  width: 70px;
+  height: 70px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 1s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+h4{
+    font-family: Arial (sans-serif)
+}
+
    
 </style>
 
@@ -24,6 +81,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="{% static 'css/gauge.css' %}" />
 <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+<link href="{% static 'css/bootstrap-toggle.css' %}" rel="stylesheet">
+<script src="{% static 'js/bootstrap-toggle.js' %}"></script>
 <!-- leaflet map -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
 <link rel="stylesheet" href="{% static 'css/leaflet-routing-machine.css'%}" />
@@ -32,31 +91,27 @@
 
 
 </head>
-<body>
+<body onload="myFunction()" style="margin:0;">
+    <h3 id="hello" style="margin-top:370px;margin-left: 590px;">loading please wait...</h3>
+    <div id="loader"></div>
+
+    <div style="display:none;" id="myDiv" class="animate-bottom">
     
     <h1 class="heading">Sub-Node</h1>
     <table style="margin:auto">
         <tr>
             <td style="padding-right:10px;padding-bottom: 10px;">
-                <h4>device Status: </h4>
+                <h4>device status: </h4>
             </td>
-            <td>
+            <td style="padding-bottom:11px">
                 <center>
-    
-                    {% if obj.device_status == True %}
                     <label class="toggle">
-                        <input type="checkbox" disabled checked>
+                        <input type="checkbox" disabled  id="checkbox1">
                         <span class="slider"></span>
-                        <span class="labels" data-on="ON" ></span>
+                        <span class="labels" id="button" data-on="ON" data-off="OFF" ></span>
+    
                       </label>
                     
-                    {% else %}
-                    <label class="toggle">
-                        <input type="checkbox" disabled>
-                        <span class="slider"></span>
-                        <span class="labels"  data-off="OFF"></span>
-                      </label>
-                    {% endif %}
                     
                </center>
             </td>
@@ -65,7 +120,7 @@
     
             <!-- Button to Open the Modal -->
             <div class="ntn">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                <button type="button" class="btn btn-primary" style="margin-right:710px;"data-toggle="modal" data-target="#myModal">
                     View Device
                   </button>
             </div>
@@ -169,6 +224,7 @@
         transform: translate(-50%,-50%);
         top: 50%;
         left: 50%;
+        margin-top: 20px;
         border-radius: 8px;
         box-shadow: 20px 20px 40px rgba(60,60,150,0.25);
         display: grid;
@@ -210,15 +266,34 @@
                                      hum=data.obj.hum,
                                      temp=data.obj.temp;
                                      smoke=data.obj.smoke;
+                                     status=data.obj.status;
                                      console.log(hum);
                                      console.log(smoke);
                                      console.log(temp);
+                                     console.log(status);
+                                     $(document).ready(function(){
+                                        if(status==='true'){
+                                            
+                                        
+                                            $('#checkbox1').prop('checked',true);
+                                            
+                                        
+                                        }
+                                        else{
+                                            
+                                            $('#checkbox1').prop('checked',false);
+                                            
+                                        
+                                            
+                                        
+                                        }
+                                     })
                                      let progressbar = document.querySelector(".circular-progress");
                                     let valueContainer = document.querySelector(".value-container");
 
                                     let progressValue = 0;
                                     let progressEndValue = temp;
-                                    console.log(progressEndValue)
+                                    
                                     let speed = 10;
                                     let progress = setInterval(() => {
                                         progressValue++;
@@ -279,12 +354,24 @@
                                 alert("error receiving  data from server");
                             }
                         });
-                    },5000)
+                    },2000)
                 });
-                
+                var myVar;
+
+                function myFunction() {
+                    myVar = setTimeout(showPage, 2000);
+                }
+
+                function showPage() {
+                        document.getElementById("loader").style.display = "none";
+                        document.getElementById("myDiv").style.display = "block";
+                        document.getElementById("hello").style.display = "none";
+                }
    
   
     </script> 
+    
+   
    
 </body>
 {% endblock %}

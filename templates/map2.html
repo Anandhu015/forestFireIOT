@@ -44,7 +44,7 @@
         <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
         <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
-<p id='headline'><b>Openweathermap</b></p>
+<p id='headline'><b>Device Locations</b></p>
 
 <!-- mapbox -->
 <div id="map" class="map"></div>
@@ -58,8 +58,7 @@
 <!-- custom script!-->
 <script>
 //MAP
-var theMarker,num=0, l, lat, lon, loc= [["MASTER-NODE",9.305057109396975,77.07870483398439],
-                                                ["SUB-NODE",9.30230430693122,77.08479881286623]];
+var theMarker,num=0, l, lat, lon, loc=[["MASTER-NODE",9.305057109396975,77.07870483398439],["SUB-NODE",9.305061344719489, 77.08249855015312],["Fire Alert facility",9.3168764, 77.1422926]];
 var mymap = L.map('map', {
     center: [23.19754890462487, 78.41209640782134],
     zoom: 5
@@ -73,6 +72,7 @@ googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}'
 //BASEMAPS
 mymap.flyTo([9.304913114863282,77.07547760219313],15)
 marker=L.marker([loc[0][1],loc[0][2]]).on('click', onMapClick).addTo(mymap);
+marker1=L.marker([loc[1][1],loc[1][2]]).on('click', subClick).addTo(mymap);
 
 var popup = L.popup();
 
@@ -171,18 +171,24 @@ function onMapClick(e) {
                         success: function (data) {
                             temp = data.obj.temp
                             hum = data.obj.hum,
-                                temp = data.obj.temp;
+                            temp = data.obj.temp;
                             smoke = data.obj.smoke;
                             status = data.obj.status;
-                            if (status) {
+                            if (status==='true') {
                                 status = "active"
+
                             }
                             else {
-                                status = "Deactive"
+                                status = "Deactive";
+                                temp="__";
+                                hum="__";
+                                smoke="__";
+
                             }
                             console.log(temp)
                             var fontsizesmall = 2;
-                            popup.setContent("SUB-NODE<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br><br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription  + "<br>Device_Status:" + status + "<br><br>Temperature: " + temp + "°C<br>Airpressure: " + airpressure + " hPa<br>Humidityt:" + hum + "%" + "<br>Smoke_Level:" + smoke + "<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
+                            popup.setContent("MASTER-NODE<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br><br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription  + "<br>Device_Status:" + status + "<br><br>Temperature: " + temp +"°C <br>Humidityt:" + hum + "%" + "<br>Smoke_Level:" + smoke + "ppm<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
+                            
                         },
 
 
@@ -209,6 +215,9 @@ function onMapClick(e) {
 //getting json function ends here
 
 //popupfunction ends here
+}
+function subClick(){
+   console.log(temp);
 }
 
 //popup

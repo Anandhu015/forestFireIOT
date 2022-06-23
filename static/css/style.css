@@ -143,3 +143,4 @@ input:nth-child(1){
   .toggle input:checked~.labels::before {
     opacity: 1;
   }
+
