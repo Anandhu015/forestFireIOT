@@ -257,14 +257,16 @@
                                     let progressbartwo = document.querySelector(".circular-progress-two");
                                     let valueContainertwo = document.querySelector(".value-container-two");
                                     let progressValue2 = 0;
-                                    let progressEndValue2 =smoke/100;
+                                    let progressEndValue2 = Math.ceil(95/100);
+                                    let display=smoke;
+                                    console.log(progressEndValue2)
 
-                                    let speed2 = 0;
+                                    let speed2 = 10;
                                     let progress2 = setInterval(() => {
                                         progressValue2++;
                                     
 
-                                        valueContainertwo.textContent = `${progressEndValue2}%`;
+                                        valueContainertwo.textContent = `${display}`;
                                         progressbartwo.style.background = `conic-gradient(
                                         #00FF00 ${progressValue2 * 3.6}deg ,
                                         #cadcff ${progressValue2 * 3.6}deg

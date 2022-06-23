@@ -100,15 +100,15 @@ def alert_view(request):
     hum=float(obj.hum_reading)
     smoke = float(obj.gas_analog_reading)
     
-    if temp>20 and smoke==0:
+    if temp>20 and smoke>0:
         value="device_id:"+str(id)+"\n"+"temperature_value:"+str(temp)+"\n"+"humidity_value:"+str(hum)+"\n"+"smoke_sensor_reading:"+str(smoke)+"\n"
-        value+="location:"+"http://192.168.121.158:8000/map"
+        value+="location:"+request.get_host()+"/map"
         telegram_settings = settings.TELEGRAM
         bot = telegram.Bot(token=telegram_settings['bot_token'])
         bot.send_message(chat_id="@%s" % telegram_settings['channel_name'],
                         text=value, parse_mode=telegram.ParseMode.HTML)
-        ogg_url="https://upload.wikimedia.org/wikipedia/commons/c/c8/Example.ogg"
-        mytext = "device id:"+str(id)+"\n"+".temperature value:"+str(temp)+"\n"+".humidity value:"+str(hum)+"\n"+".smoke sensor reading:"+str(smoke)+"\n"
+        mytext="Hi ,"+str(request.user)
+        mytext += ".device id:"+str(id)+"\n"+".temperature value:"+str(temp)+"\n"+".humidity value:"+str(hum)+"\n"+".smoke sensor reading:"+str(smoke)+"\n"
         language = 'en'
         myobj = gTTS(text=mytext, lang=language, slow=False)
         myobj.save("welcome.mp3")
@@ -118,7 +118,6 @@ def alert_view(request):
         
         # os.system("mpg321 welcome.mp3")
 
-        print(type(ogg_url))
         welcome=open(r"welcome.mp3",'rb')
         # welcome_sound=welcome.readframes(-1)
         
