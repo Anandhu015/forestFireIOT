@@ -264,13 +264,11 @@ h4{
                                 // storing json data in variables
                                 
                                      hum=data.obj.hum,
+                                    
                                      temp=data.obj.temp;
                                      smoke=data.obj.smoke;
                                      status=data.obj.status;
-                                     console.log(hum);
-                                     console.log(smoke);
-                                     console.log(temp);
-                                     console.log(status);
+                                     
                                      $(document).ready(function(){
                                         if(status==='true'){
                                             
@@ -292,10 +290,11 @@ h4{
                                     let valueContainer = document.querySelector(".value-container");
 
                                     let progressValue = 0;
-                                    let progressEndValue = temp;
+                                    
                                     
                                     let speed = 10;
                                     let progress = setInterval(() => {
+                                        let progressEndValue = temp;
                                         progressValue++;
                                     
                                         valueContainer.textContent = `${progressEndValue}°C`;
@@ -303,46 +302,75 @@ h4{
                                         #4d5bf9 ${progressValue * 3.6}deg ,
                                         #cadcff ${progressValue * 3.6}deg
                                     )`;
-                                        if (progressValue == parseInt(progressEndValue)) {
-                                            clearInterval(progress);
+                                    if (progressValue <= parseInt(progressEndValue)) {
+                                            if (progressValue == parseInt(progressEndValue)){
+                                                clearInterval(progress);
+                                            }
+                                            
+                                            
+                                            
+                                        }
+                                        else{
+                                            progressValue = 0;
                                         }
                                     },speed)
                                     let progressbarone = document.querySelector(".circular-progress-one");
                                     let valueContainerone = document.querySelector(".value-container-one");
                                     let progressValue1 = 0;
-                                    let progressEndValue1 =hum;
+                                    
 
                                     let speed1 = 10;
                                     let progress1 = setInterval(() => {
+                                        let progressEndValue1 =hum;
                                         progressValue1++;
                                         valueContainerone.textContent = `${progressEndValue1}`;
                                         progressbarone.style.background = `conic-gradient(
                                         #FF0000 ${progressValue1 * 3.6}deg ,
                                         #cadcff ${progressValue1 * 3.6}deg
                                     )`;
-                                        if (progressValue1 == progressEndValue1) {
-                                            clearInterval(progress1);
+                                    if (progressValue1 <= parseInt(progressEndValue1)) {
+                                            if (progressValue1 == parseInt(progressEndValue1)){
+                                                clearInterval(progress1);
+                                            }
+                                            
+                                            
+                                            
+                                        }
+                                        else{
+                                            progressValue1 = 0;
                                         }
                                     },speed1);
                                     let progressbartwo = document.querySelector(".circular-progress-two");
                                     let valueContainertwo = document.querySelector(".value-container-two");
                                     let progressValue2 = 0;
-                                    let progressEndValue2 =smoke/100;
-                                    let display=smoke;
+                                    
+                                    
 
                                     let speed2 = 0;
                                     let progress2 = setInterval(() => {
+                                        let progressEndValue2 = Math.ceil(smoke/100);
                                         progressValue2++;
                                     
 
-                                        valueContainertwo.textContent = `${display}`;
+                                        valueContainertwo.textContent = `${progressEndValue2}ppm`;
                                         progressbartwo.style.background = `conic-gradient(
                                         #00FF00 ${progressValue2 * 3.6}deg ,
                                         #cadcff ${progressValue2 * 3.6}deg
                                     )`;
-                                        if (progressValue2 == parseInt(progressEndValue2)) {
-                                            clearInterval(progress2);
+                                        if (progressValue2 <= parseInt(progressEndValue2)) {
+                                            if (progressValue2 == parseInt(progressEndValue2)){
+                                                clearInterval(progress2);
+                                            }
+                                            
+                                            
+                                            
                                         }
+                                        else{
+                                            progressValue2 = 0;
+                                        }
+                                        console.log(smoke);
+                                        console.log(progressValue2);
+                                        console.log(progressEndValue2);
                                     },speed2);
                                 
                                 

@@ -46,7 +46,9 @@ def sensor_data_view(request):
             print(temp1)
             hum1 = dict['hum_reading1']
             gas_analog1 = dict['gas_analog_reading1']
-            secondSensor_reading.objects.create(device_id1=id1, temp_reading1=temp1, hum_reading1=hum1, gas_analog_reading1=gas_analog1)
+            device_status=dict['device_status']
+            print(device_status)
+            secondSensor_reading.objects.create(device_id1=id1, temp_reading1=temp1, hum_reading1=hum1,device_status1=device_status, gas_analog_reading1=gas_analog1)
             
     
     if request.accepts("application/json"):
