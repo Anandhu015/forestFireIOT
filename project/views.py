@@ -47,8 +47,12 @@ def sensor_data_view(request):
             hum1 = dict['hum_reading1']
             gas_analog1 = dict['gas_analog_reading1']
             device_status=dict['device_status']
-            print(device_status)
-            secondSensor_reading.objects.create(device_id1=id1, temp_reading1=temp1, hum_reading1=hum1,device_status1=device_status, gas_analog_reading1=gas_analog1)
+            if device_status == '1':
+                status=True
+            else:
+                status=False
+            print(status)
+            secondSensor_reading.objects.create(device_id1=id1, temp_reading1=temp1, hum_reading1=hum1,device_status1=status, gas_analog_reading1=gas_analog1)
             
     
     if request.accepts("application/json"):
@@ -59,23 +63,17 @@ def sensor_data_view(request):
         smoke_reading=obj.gas_analog_reading
         device_status=obj.device_status
         print(device_status)
-        response={"id":device_id,"temp":temp_reading,"hum":hum_reading,"smoke":smoke_reading,"status":device_status}
+        obj1=secondSensor_reading.objects.last()
+        device_id1=obj1.device_id1
+        temp_reading1=obj1.temp_reading1
+        hum_reading1=obj1.hum_reading1
+        smoke_reading1=obj1.gas_analog_reading1
+        device_status1=obj1.device_status1
+        response={"id":device_id,"temp":temp_reading,"hum":hum_reading,"smoke":smoke_reading,"status":device_status,"id1":device_id1,"temp1":temp_reading1,"hum1":hum_reading1,"smoke1":smoke_reading1,"status1":device_status1}
         
         return JsonResponse({"obj":response})
 
 
-@csrf_exempt
-def subnode_data_view(request):
-    if request.accepts("application/json"):
-        obj=secondSensor_reading.objects.last()
-        device_id=obj.device_id1
-        temp_reading=obj.temp_reading1
-        hum_reading=obj.hum_reading1
-        smoke_reading=obj.gas_analog_reading1
-        device_status=obj.device_status1
-        response={"id":device_id,"temp":temp_reading,"hum":hum_reading,"smoke":smoke_reading,"status":device_status}
-        print(device_status)
-        return JsonResponse({"obj":response})
     
     
 def masternode_sensor_view(request):
@@ -96,7 +94,7 @@ def map_view(request):
     
 
 def alert_view(request):
-    obj=Sensor_reading.objects.last();
+    obj=Sensor_reading.objects.last()
     id=obj.device_id
     temp=float(obj.temp_reading)
     hum=float(obj.hum_reading)

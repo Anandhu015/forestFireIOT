@@ -348,10 +348,11 @@
                                     let speed2 = 0;
                                     let progress2 = setInterval(() => {
                                         let progressEndValue2 = Math.ceil(smoke/100);
+                                        let display=smoke;
                                         progressValue2++;
                                     
 
-                                        valueContainertwo.textContent = `${progressEndValue2}ppm`;
+                                        valueContainertwo.textContent = `${display}ppm`;
                                         progressbartwo.style.background = `conic-gradient(
                                         #00FF00 ${progressValue2 * 3.6}deg ,
                                         #cadcff ${progressValue2 * 3.6}deg

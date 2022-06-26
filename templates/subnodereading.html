@@ -1,4 +1,4 @@
-
+{% extends "base.html"%}
 {% load static %}
 <head>
     <title>Sub node reading</title>
@@ -254,20 +254,24 @@ h4{
     
     
     <script>
-        var smoke,temp,hum;
+        var smoke,temp,hum,i=2;
          $(document).ready(function () {
                         setInterval(function(){
                             $.ajax({
-                            url:"{% url 'sub-sensor' %}",
+                            url:"{% url 'sensor' %}",
                             dataType: 'json',
                             success: function (data) {
                                 // storing json data in variables
                                 
-                                     hum=data.obj.hum,
+                                     hum=data.obj.hum1,
                                     
-                                     temp=data.obj.temp;
-                                     smoke=data.obj.smoke;
-                                     status=data.obj.status;
+                                     temp=data.obj.temp1;
+                                     smoke=data.obj.smoke1;
+                                     status=data.obj.status1;
+                                     
+                                     
+                                     
+                                    
                                      
                                      $(document).ready(function(){
                                         if(status==='true'){
@@ -349,10 +353,11 @@ h4{
                                     let speed2 = 0;
                                     let progress2 = setInterval(() => {
                                         let progressEndValue2 = Math.ceil(smoke/100);
+                                        let display=smoke;
                                         progressValue2++;
                                     
 
-                                        valueContainertwo.textContent = `${progressEndValue2}ppm`;
+                                        valueContainertwo.textContent = `${smoke}ppm`;
                                         progressbartwo.style.background = `conic-gradient(
                                         #00FF00 ${progressValue2 * 3.6}deg ,
                                         #cadcff ${progressValue2 * 3.6}deg
@@ -381,6 +386,7 @@ h4{
                             error: function () {
                                 alert("error receiving  data from server");
                             }
+                            
                         });
                     },2000)
                 });
