@@ -20,17 +20,17 @@ body{
 /* #temp{
     height: 400px;
     width:400px;
-    background-color: #ffffff;
+    background-color: transparent;
     position: absolute;
     transform: translate(-50%,-50%);
     top: 50%;
     left: 50%;
     border-radius: 8px;
-    box-shadow: 20px 20px 40px rgba(60,60,150,0.25);
+   
     display: grid;
     place-items: center;
 
-} */
+}  */
 
 .circular-progress{
     position: relative;
@@ -62,13 +62,13 @@ body{
 .container-one{
     height: 400px;
     width:400px;
-    background-color: #ffffff;
+    background-color:transparent;
     position: absolute;
     transform: translate(-10%,-10%);
     top: 198px;
     left: 100px;
     border-radius: 8px;
-    box-shadow: 20px 20px 40px rgba(60,60,150,0.25);
+   
     display: grid;
     place-items: center;
 
@@ -103,13 +103,13 @@ body{
 .container-two{
     height: 400px;
     width:400px;
-    background-color: #ffffff;
+    background-color:transparent;
     position: absolute;
     transform: translate(-10%,-10%);
     top: 198px;
     right: 20px;
     border-radius: 8px;
-    box-shadow: 20px 20px 40px rgba(60,60,150,0.25);
+    color: #ffffff;
     display: grid;
     place-items: center;
 

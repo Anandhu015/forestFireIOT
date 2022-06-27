@@ -12,9 +12,7 @@
 <!-- <link href="https://fonts.googleleapis.com/css2?family=Poppins:wght@700display=swap" rel="stylesheet"/> -->
 
 <style>
-    body{
-        background-image: url("{% static 'img/forest.jpg' %}");
-    }
+  
     /* Center the loader */
 #loader {
     position: absolute;
@@ -92,7 +90,7 @@ h4{
 
 </head>
 <body onload="myFunction()" style="margin:0;">
-    <h3 id="hello" style="margin-top:370px;margin-left: 590px;">loading please wait...</h3>
+    <h3 id="hello" style="margin-top:370px;margin-left: 590px; color: #ffffff;">loading please wait...</h3>
     <div id="loader"></div>
 
     <div style="display:none;" id="myDiv" class="animate-bottom">
@@ -101,7 +99,7 @@ h4{
     <table style="margin:auto">
         <tr>
             <td style="padding-right:10px;padding-bottom: 10px;">
-                <h4>device status: </h4>
+                <h4 style="color:#ffffff">device status: </h4>
             </td>
             <td style="padding-bottom:11px">
                 <center>
@@ -242,7 +240,7 @@ h4{
             </div>
         </div>
         <div class="container-two">
-            <h1 style="font-family:Poppins,sans-serif;font-size:large;">Smoke Reading(in percentage)</h1>
+            <h1 style="font-family:Poppins,sans-serif;font-size:large;">Smoke Reading(in ppm)</h1>
             <div class="circular-progress-two">
                 <div class="value-container-two"></div>
             </div>
