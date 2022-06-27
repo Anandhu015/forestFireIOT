@@ -1,5 +1,6 @@
 import os
 import json
+import re
 from django.shortcuts import HttpResponse
 import wave
 from django.shortcuts import render
@@ -17,6 +18,8 @@ from gtts import gTTS
 
 
 # Create your views here.
+def startpage_view(request):
+    return render(request,"frontpage.html")
 def home_view(request):
     return render(request,"home.html")
 def about_view(request):

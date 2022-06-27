@@ -16,3 +16,8 @@ class secondSensor_reading(models.Model):
     hum_reading1=models.FloatField(max_length=20,null=true)
     device_status1=models.BooleanField(default=True)
     gas_analog_reading1=models.FloatField(max_length=20,default="0",null=true)
+
+class login(models.Model):
+    user_id=models.IntegerField(primary_key=true)
+    username=models.CharField(max_length=20)
+    password=models.CharField(max_length=20)
