@@ -1,3 +1,5 @@
+{% extends "base.html"%}
+{% block content %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -12,20 +14,24 @@
     font-size: 30px;
     text-align: center;
     padding-right: 2px;
+ 
+   
     z-index: 1;
+    color:white;
 }
 
 #map
 {
     position: absolute; 
-    height: 102vh;
+    height: 100vh;
     min-height: 200px;
-    width: 99.5vw;
+    width:100%;
     min-width: 200px;
-    left: 2px;  
+    right:2px;
+    top:50px;
     border: 3px solid;
     border-color: grey;
-    margin-bottom: 0;
+    margin-bottom: 15px;
     z-index: -2;
 }
 </style>
@@ -187,7 +193,7 @@ function onMapClick(e) {
                             }
                             console.log(temp)
                             var fontsizesmall = 2;
-                            popup.setContent("MASTER-NODE<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br><br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription  + "<br>Device_Status:" + status + "<br><br>Temperature: " + temp +"°C <br>Humidityt:" + hum + "%" + "<br>Smoke_Level:" + smoke + "ppm<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
+                            popup.setContent("MASTER-NODE<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br><br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription  + "<br>Device_Status:" + status + "<br><br>Temperature: " + temp +"°C <br>Humidityt:" + hum + "%" + "<br>Smoke_Level:" + smoke + "ppm<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "<br>Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
                             
                         },
 
@@ -226,3 +232,4 @@ function subClick(){
 
 </body>
 </html>
+{% endblock %}
