@@ -32,31 +32,67 @@
      <div class="dropdown-one">
        <button class="dropbtn-one">Dropdown 
          <i class="fa fa-caret-down"></i>
+        
        </button>
        <div class="dropdown-content-one">
          <a href="/masternode"  style="text-decoration: none;color:rgb(0, 0, 0)">Master-Node</a>
          <a href="/subnode"  style="text-decoration: none;color:rgb(13, 3, 3)">Sub-Node</a>
         
-       </div>
+      </div>
      </div>
      <div class="dropdown-one" style="float:right ">
-   
-      <button class="dropbtn-one" >
-       
-      
-        <i class='fa fa-fire-extinguisher' style='color: red ;font-size: 25px;'></i>
-      </button>
-      <div class="dropdown-content-one" style="right:4px;left:auto; width:300px;height:300px">
-       
+      <a href="#" class="notification">
+        <i class='bi bi-bell-fill' id="bell" style='color: rgb(0, 0, 0) ;font-size: 20px; margin-right: 13px;'></i>
+        <span class="badge" id="badge">3</span>
+      </a>
+      <div class="dropdown-content-two">
+     
         <p>Notifications (<b>2</b>)</p>
         <a href="#"  style="text-decoration: none;color:rgb(0, 0, 0)">Nothing here</a>
-       
-       
-      </div>
-     </div> 
+      </div>   
    </div>
-  
+  </div>
 <body>
+  <script>
+    var alert=0;
+  $(document).ready(function () {
+    setInterval(function(){
+        $.ajax({
+        url:"{% url 'sensor' %}",
+        dataType: 'json',
+        success: function (data) {
+            // storing json data in variables
+            
+                 hum=data.obj.hum,
+                 temp=data.obj.temp;
+                 smoke=data.obj.smoke;
+                 status=data.obj.status;
+                    console.log(status)},
+         error: function () 
+         {
+            alert("error receiving  data from server");
+          }
+        });
+        alert++;
+        document.getElementById("badge").innerHTML=alert;
+        
+        if(alert==5){
+          document.getElementById("bell").style.color="red";
+          document.getElementById("badge").style.background.color="red";
+        }
+        if(alert==10){
+          alert=0;
+          document.getElementById("bell").style.color="black";
+          document.getElementById("badge").style.background.color="white";
+        }
+        console.log('3');
+        },10000);
+         });
+
+              
+  </script>
+                 
+                 
 {% block content %}
     replace me
 

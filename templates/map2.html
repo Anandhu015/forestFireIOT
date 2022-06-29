@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Openweathermap</title>
+<title>weathermap</title>
 
 <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.4.0/leaflet.css" />
 <style>
@@ -50,7 +50,7 @@
         <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
         <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
-<p id='headline'><b>Device Locations</b></p>
+
 
 <!-- mapbox -->
 <div id="map" class="map"></div>
@@ -78,9 +78,10 @@ googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}'
 //BASEMAPS
 mymap.flyTo([9.304913114863282,77.07547760219313],15)
 marker=L.marker([loc[0][1],loc[0][2]]).on('click', onMapClick).addTo(mymap);
-marker1=L.marker([loc[1][1],loc[1][2]]).on('click', subClick).addTo(mymap);
+marker1=L.marker([loc[1][1],loc[1][2]]).on('click', onMapClick).addTo(mymap);
 
 var popup = L.popup();
+
 
 //popup function
 function onMapClick(e) {
@@ -88,6 +89,8 @@ function onMapClick(e) {
         .setLatLng(e.latlng)
         .setContent("You clicked the map at " + e.latlng.toString()) //esample from leaflet, will be immediately replaced by weatherpopup...
         .openOn(mymap);
+    
+  
 
 
     //getting json function
@@ -180,6 +183,14 @@ function onMapClick(e) {
                             temp = data.obj.temp;
                             smoke = data.obj.smoke;
                             status = data.obj.status;
+                            temp1 = data.obj.temp1
+                            hum1 = data.obj.hum1,
+                            temp1 = data.obj.temp1;
+                            smoke1 = data.obj.smoke1;
+                            status1 = data.obj.status1;
+                            console.log(typeof(status));
+                            console.log(typeof(status1));
+                            console.log(temp1);
                             if (status==='true') {
                                 status = "active"
 
@@ -191,9 +202,21 @@ function onMapClick(e) {
                                 smoke="__";
 
                             }
-                            console.log(temp)
+                            if (status1==true) {
+                                status1 = "active"
+
+                            }
+                            else {
+                                status1= "Deactive";
+                                temp1="__";
+                                hum1="__";
+                                smoke1="__";
+
+                            }
+                           
                             var fontsizesmall = 2;
                             popup.setContent("MASTER-NODE<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br><br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription  + "<br>Device_Status:" + status + "<br><br>Temperature: " + temp +"°C <br>Humidityt:" + hum + "%" + "<br>Smoke_Level:" + smoke + "ppm<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "<br>Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
+                            // popup1.setContent("SUB-NODE<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br><br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription  + "<br>Device_Status:" + status1 + "<br><br>Temperature: " + temp1 +"°C <br>Humidityt:" + hum1 + "%" + "<br>Smoke_Level:" + smoke1 + "ppm<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "<br>Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
                             
                         },
 
@@ -222,9 +245,7 @@ function onMapClick(e) {
 
 //popupfunction ends here
 }
-function subClick(){
-   console.log(temp);
-}
+
 
 //popup
 

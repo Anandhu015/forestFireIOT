@@ -55,6 +55,7 @@ def sensor_data_view(request):
             else:
                 status=False
             print(status)
+            
             secondSensor_reading.objects.create(device_id1=id1, temp_reading1=temp1, hum_reading1=hum1,device_status1=status, gas_analog_reading1=gas_analog1)
             
     
@@ -73,8 +74,25 @@ def sensor_data_view(request):
         smoke_reading1=obj1.gas_analog_reading1
         device_status1=obj1.device_status1
         response={"id":device_id,"temp":temp_reading,"hum":hum_reading,"smoke":smoke_reading,"status":device_status,"id1":device_id1,"temp1":temp_reading1,"hum1":hum_reading1,"smoke1":smoke_reading1,"status1":device_status1}
+       
         
-        return JsonResponse({"obj":response})
+    
+                
+
+            # Import the required module for text
+    # to speech conversion
+            
+            # os.system("mpg321 welcome.mp3")
+
+            # welcome=open(r"welcome.mp3",'rb')
+            # # welcome_sound=welcome.readframes(-1)
+            
+            # bot.sendVoice(
+            # chat_id="@%s" % telegram_settings['channel_name'],voice=welcome
+            # )
+       
+
+    return JsonResponse({"obj":response})
 
 
     
@@ -102,32 +120,28 @@ def alert_view(request):
     temp=float(obj.temp_reading)
     hum=float(obj.hum_reading)
     smoke = float(obj.gas_analog_reading)
-    
     if temp>20 and smoke>0:
-        value="device_id:"+str(id)+"\n"+"temperature_value:"+str(temp)+"\n"+"humidity_value:"+str(hum)+"\n"+"smoke_sensor_reading:"+str(smoke)+"\n"
-        value+="location:"+request.get_host()+"/map"
-        telegram_settings = settings.TELEGRAM
-        bot = telegram.Bot(token=telegram_settings['bot_token'])
-        bot.send_message(chat_id="@%s" % telegram_settings['channel_name'],
-                        text=value, parse_mode=telegram.ParseMode.HTML)
-        mytext="Hi ,"+str(request.user)
-        mytext += ".device id:"+str(id)+"\n"+".temperature value:"+str(temp)+"\n"+".humidity value:"+str(hum)+"\n"+".smoke sensor reading:"+str(smoke)+"\n"
-        language = 'en'
-        myobj = gTTS(text=mytext, lang=language, slow=False)
-        myobj.save("welcome.mp3")
+                value1="device_id:"+str(id)+"\n"+"temperature_value:"+str(temp)+"\n"+"humidity_value:"+str(hum)+"\n"+"smoke_sensor_reading:"+str(smoke)+"\n"
+                value1+="location:"+request.get_host()+"/map"
+                telegram_settings = settings.TELEGRAM
+                bot = telegram.Bot(token=telegram_settings['bot_token'])
+                bot.send_message(chat_id="@%s" % telegram_settings['channel_name'],
+                                text=value1, parse_mode=telegram.ParseMode.HTML)
+                
+                # mytext="Hi ,"+str(request.user)
+                # mytext += ".device id:"+str(device_id)+"\n"+".temperature value:"+str(temp_reading)+"\n"+".humidity value:"+str(hum_reading)+"\n"+".smoke sensor reading:"+str(smoke_reading)+"\n"
+                # language = 'en'
+                # myobj = gTTS(text=mytext, lang=language, slow=False)
+               
+    # if temp_reading1>20 and smoke_reading1>1000:
 
-        # Import the required module for text
-# to speech conversion
-        
-        # os.system("mpg321 welcome.mp3")
-
-        welcome=open(r"welcome.mp3",'rb')
-        # welcome_sound=welcome.readframes(-1)
-        
-        bot.sendVoice(
-        chat_id="@%s" % telegram_settings['channel_name'],voice=welcome
-        )
-       
-
+    #             value1="device_id:"+str(device_id1)+"\n"+"temperature_value:"+str(temp_reading1)+"\n"+"humidity_value:"+str(hum_reading1)+"\n"+"smoke_sensor_reading:"+str(smoke_reading1)+"\n"
+    #             value1+="location:"+request.get_host()+"/map"
+    #             telegram_settings1 = settings.TELEGRAM
+    #             bot1= telegram.Bot(token=telegram_settings1['bot_token'])
+    #             bot1.send_message(chat_id="@%s" % telegram_settings1['channel_name'],
+    #                             text=value1, parse_mode=telegram.ParseMode.HTML)
+    
+   
     
     return render(request,"fire_alert.html",{})

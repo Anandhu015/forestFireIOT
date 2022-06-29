@@ -1,12 +1,12 @@
 {% extends "base.html"%}
 {% load static %}
 <head>
-    <title>Sub node reading</title>
+    
     {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
 <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
 <link rel="stylesheet" href="{% static 'css/leaflet.awesome-markers.css' %}">
-
+<title>Sub node reading</title>
 
 
 <!-- <link href="https://fonts.googleleapis.com/css2?family=Poppins:wght@700display=swap" rel="stylesheet"/> -->
@@ -89,7 +89,7 @@ h4{
 
 </head>
 <body onload="myFunction()" style="margin:0;">
-    <h3 id="hello" style="margin-top:340px;margin-left: 590px; color: #ffffff;">loading please wait...</h3>
+    <h3 id="hello" style="position: absolute; bottom:300px;left:600px; color:white;">loading please wait...</h3>
     <div id="loader"></div>
 
     <div style="display:none;" id="myDiv" class="animate-bottom">
@@ -116,11 +116,11 @@ h4{
     </table>
     
             <!-- Button to Open the Modal -->
-            <div class="ntn">
-                <button type="button" class="btn btn-primary" style="margin-right:700px;"data-toggle="modal" data-target="#myModal">
+          
+                <button type="button" class="btn btn-primary" style="position:absolute;top:600px;right:715px;"data-toggle="modal" data-target="#myModal">
                     View Device
                   </button>
-            </div>
+       
             
           
             <!-- The Modal -->
@@ -219,7 +219,7 @@ h4{
         background-color:transparent;
         position: absolute;
         transform: translate(-50%,-50%);
-        top: 50%;
+        top: 342px;
         left: 50%;
         margin-top: 16px;
         border-radius: 8px;
