@@ -1,4 +1,6 @@
+from datetime import datetime
 from django.db import models
+from django.utils import timezone
 from sqlalchemy import true
 
 # Create your models here.
@@ -24,6 +26,12 @@ class login(models.Model):
 class alert_notify(models.Model):
     notify_detail=models.TextField()
     read_by=models.BooleanField(default=False)
+    device_id=models.CharField(max_length=30,default="no alert")
+    temp_reading=models.FloatField(max_length=20,null=true)
+    hum_reading=models.FloatField(max_length=20,null=true)
+    device_status=models.BooleanField(default=True)
+    gas_analog_reading=models.FloatField(max_length=20,default="0",null=true)
+    alert_time=models.TimeField(default=datetime.now())
     
     def __str__(self):
         return(self.notify_detail)

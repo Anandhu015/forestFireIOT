@@ -1,3 +1,4 @@
+import datetime
 import os
 import json
 import re
@@ -128,8 +129,15 @@ def alert_view(request):
     hum_reading1=obj1.hum_reading1
     smoke_reading1=obj1.gas_analog_reading1
     device_status1=obj1.device_status1
+    now = datetime.datetime.now()
+    time=now.strftime('%I:%M:%S')
+   
+
+    current_time = now.strftime("%H:%M:%S")
   
     if temp>20 and smoke>1000:
+                val=alert_notify.objects.create(notify_detail="Alert!!!!!!"+"\n"+"Device_id:"+str(id), read_by=False,device_id=id,alert_time=time)
+               
                 value1="device_id:"+str(id)+"\n"+"temperature_value:"+str(temp)+"\n"+"humidity_value:"+str(hum)+"\n"+"smoke_sensor_reading:"+str(smoke)+"\n"
                 value1+="location:"+request.get_host()+"/map"
                 telegram_settings = settings.TELEGRAM
@@ -139,7 +147,7 @@ def alert_view(request):
                 response={"id":id,"temp":temp,"hum":hum,"smoke":smoke,"status":device_status}
                 
     if temp_reading1>20 and smoke_reading1>1000:
-
+                val=alert_notify.objects.create(notify_detail="Alert!!!!!!"+"\n"+"Device_id:"+str(device_id1), read_by=False,device_id=device_id1,alert_time=time)
                 value="device_id:"+str(device_id1)+"\n"+"temperature_value:"+str(temp_reading1)+"\n"+"humidity_value:"+str(hum_reading1)+"\n"+"smoke_sensor_reading:"+str(smoke_reading1)+"\n"
                 value+="location:"+request.get_host()+"/map"
                 telegram_settings1 = settings.TELEGRAM
@@ -163,10 +171,17 @@ def alert_notify_view(request):
 def send_alert_notify_view(request):
     noti=request.GET['notif']
     
+   
+       
+
     notify=alert_notify.objects.get(pk=noti)
     notify.delete()
    
     return JsonResponse({"bool":True})
+def empty_notify_view(request):
+    alert_notify.objects.all().delete() 
+    return JsonResponse({"bool":True})
+
 
    
     

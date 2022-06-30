@@ -51,10 +51,11 @@
           <i class='bi bi-bell-fill' id="bell" style='color: rgb(255, 255, 255) ;font-size: 20px; margin-right: 13px;'></i>
           <span class="badge" id="badge">0</span>
         </a>
-        <div id="con" class="dropdown-content-two">
+        <div id="con"  class="dropdown-content-two">
        
-          <p class="para">Notifications (<b>2</b>)</p>
-          <div class="notify">
+          <p id="para" class="font-weight-bolder">Notifications (<b>2</b>) </p>
+                <a id="destroy">close all</a>
+          <div class="notify" id="notify">
               loading...
               
   
@@ -67,12 +68,17 @@
   </div>
 <body>
   <script>
-    var al=0;
+    
   $(function () 
   {
     $("#drop").click(function(){
+      
     $("#con").toggle();
+   
+    
+
     });
+ 
     setInterval(function(){
         $.ajax({
         url:"{% url 'alert' %}",
@@ -88,19 +94,19 @@
                   console.log("humidity"+hum);
                   console.log("temperature"+temp);
                   console.log(data);
-                  al++;
-                  document.getElementById("badge").innerHTML=al;
+                //   al++;
+                //   document.getElementById("badge").innerHTML=al;
                 
-                if(al==1){
-                  document.getElementById("bell").style.color="red";
+                // if(al==1){
+                //   document.getElementById("bell").style.color="red";
                   
-                }
-                if(al==10){
-                  al=0;
-                  document.getElementById("badge").innerHTML=al;
-                  document.getElementById("bell").style.color="white";
+                // }
+                // if(al==10){
+                //   al=0;
+                //   document.getElementById("badge").innerHTML=al;
+                //   document.getElementById("bell").style.color="white";
                  
-                }
+                // }
                
                    
          },
@@ -116,11 +122,16 @@
         success: function (res) {
             // storing json data in variables
                _html='';
+             
                _json=$.parseJSON(res.data);
                $.each(_json,function(index,d){
+                
+               
+                          
                           if(d.fields.read_by ==false){
-                            _html+= '<a class=" asif bg-light" data-index="'+d.pk+'" data-notif="'+d.pk+'" id="button-close" href="#" style="text-decoration: none;color:rgb(0, 0, 0)'+d.pk+'">'+d.fields.notify_detail+'\
-                            <button style="float:right;display:none"class="btn btn-sm btn-success marked'+d.pk+'"> <i class="bi bi-check-circle-fill"></i></button></a>';
+                              
+                            _html+= '<a class=" asif bg-light" data-index="'+d.pk+'" data-notif="'+d.pk+'" id="button-close" href="/map" style="text-decoration: none;color:rgb(0, 0, 0)'+d.pk+'">'+d.fields.notify_detail+'\
+                              <p style="float:right;font-size:15px;margin-top:0px;">"'+d.fields.alert_time+'"</p><button style="float:right;display:none"class="btn btn-sm btn-success marked'+d.pk+'"> <i class="bi bi-check-circle-fill"></i></button></a>';
 
                           }
                           
@@ -139,11 +150,34 @@
           
         });
         
-        },8000);
-        
+        },10000);
+        var click=0;
+        $(document).on("click","#destroy",function(){
+          var _count=0;
+          click=click+1;
+          $.ajax({
+             url: "{% url 'empty_notify' %}",
+             data:{
+              count:_count
+             },
+             dataType: 'json',
+             success:function(data){
+                console.log(data);
+                if(data.bool==true){
+                  alert("All alerts deleted successfully");
+                  
+                      
+                }
+                
+             }
+            })
+        })
          $(document).on("click","#button-close",function(){
+          
+          
           var _index=$(this).attr('data-index');
-          console.log(_index);
+          console.log("index"+_index);
+
        
           var _notif=$(this).attr("data-notif");
           $.ajax({
