@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
     <script src=
     "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
         </script>
@@ -21,6 +22,10 @@
             background-repeat: no-repeat;
             background-size:cover;
             font-family: Arial, Helvetica, sans-serif;
+        }
+        .marked{
+          display: none;
+          color:red;
         }
    </style>
    </head>
@@ -40,55 +45,127 @@
         
       </div>
      </div>
-     <div class="dropdown-one" style="float:right ">
-      <a href="#" class="notification">
-        <i class='bi bi-bell-fill' id="bell" style='color: rgb(0, 0, 0) ;font-size: 20px; margin-right: 13px;'></i>
-        <span class="badge" id="badge">3</span>
-      </a>
-      <div class="dropdown-content-two">
-     
-        <p>Notifications (<b>2</b>)</p>
-        <a href="#"  style="text-decoration: none;color:rgb(0, 0, 0)">Nothing here</a>
+     <button  id="drop" style="float:right;border: none; background-color: #333;">
+      <div class="dropdown-one" >
+        <a href="#" class="notification">
+          <i class='bi bi-bell-fill' id="bell" style='color: rgb(255, 255, 255) ;font-size: 20px; margin-right: 13px;'></i>
+          <span class="badge" id="badge">0</span>
+        </a>
+        <div id="con" class="dropdown-content-two">
+       
+          <p class="para">Notifications (<b>2</b>)</p>
+          <div class="notify">
+              loading...
+              
+  
+          </div>
+     </button>
+        
+        
       </div>   
    </div>
   </div>
 <body>
   <script>
-    var alert=0;
-  $(document).ready(function () {
+    var al=0;
+  $(function () 
+  {
+    $("#drop").click(function(){
+    $("#con").toggle();
+    });
     setInterval(function(){
         $.ajax({
-        url:"{% url 'sensor' %}",
+        url:"{% url 'alert' %}",
         dataType: 'json',
         success: function (data) {
             // storing json data in variables
-            
+                id=data.obj.id;
                  hum=data.obj.hum,
                  temp=data.obj.temp;
                  smoke=data.obj.smoke;
                  status=data.obj.status;
-                    console.log(status)},
+                  console.log("id:"+id);
+                  console.log("humidity"+hum);
+                  console.log("temperature"+temp);
+                  console.log(data);
+                  al++;
+                  document.getElementById("badge").innerHTML=al;
+                
+                if(al==1){
+                  document.getElementById("bell").style.color="red";
+                  
+                }
+                if(al==10){
+                  al=0;
+                  document.getElementById("badge").innerHTML=al;
+                  document.getElementById("bell").style.color="white";
+                 
+                }
+               
+                   
+         },
          error: function () 
          {
             alert("error receiving  data from server");
           }
+          
         });
-        alert++;
-        document.getElementById("badge").innerHTML=alert;
-        
-        if(alert==5){
-          document.getElementById("bell").style.color="red";
-          document.getElementById("badge").style.background.color="red";
-        }
-        if(alert==10){
-          alert=0;
-          document.getElementById("bell").style.color="black";
-          document.getElementById("badge").style.background.color="white";
-        }
-        console.log('3');
-        },10000);
-         });
+        $.ajax({
+        url:"{% url 'alert_notify' %}",
+        dataType: 'json',
+        success: function (res) {
+            // storing json data in variables
+               _html='';
+               _json=$.parseJSON(res.data);
+               $.each(_json,function(index,d){
+                          if(d.fields.read_by ==false){
+                            _html+= '<a class=" asif bg-light" data-index="'+d.pk+'" data-notif="'+d.pk+'" id="button-close" href="#" style="text-decoration: none;color:rgb(0, 0, 0)'+d.pk+'">'+d.fields.notify_detail+'\
+                            <button style="float:right;display:none"class="btn btn-sm btn-success marked'+d.pk+'"> <i class="bi bi-check-circle-fill"></i></button></a>';
 
+                          }
+                          
+                         
+                 
+               });
+               $(".notify").html(_html);
+           
+               
+                   
+         },
+         error: function () 
+         {
+            alert("error receiving  data from server");
+          }
+          
+        });
+        
+        },8000);
+        
+         $(document).on("click","#button-close",function(){
+          var _index=$(this).attr('data-index');
+          console.log(_index);
+       
+          var _notif=$(this).attr("data-notif");
+          $.ajax({
+             url: "{% url 'mark_read_notif' %}",
+             data:{
+              notif:_notif
+             },
+             dataType: 'json',
+             success: function (res) {
+              
+              if(res.bool==true){
+                    $(".asif"+_index).removeClass('bg-light');
+                
+                    $(".marked"+_index).show();
+                    console.log(res)
+                    
+              }
+             }
+            })
+
+         })
+        });
               
   </script>
                  

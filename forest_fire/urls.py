@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from project.views import about_view,sensor_data_view, map_view,home_view,alert_view,masternode_sensor_view, startpage_view, subnode_sensor_view
+from project.views import about_view, alert_notify_view, send_alert_notify_view,sensor_data_view, map_view,home_view,alert_view,masternode_sensor_view, startpage_view, subnode_sensor_view
 from django.contrib import admin
 from django.urls import path
 
@@ -28,4 +28,6 @@ urlpatterns = [
     path('masternode',masternode_sensor_view,name='masternode'),
     path('subnode',subnode_sensor_view,name='map2'),
     path('',startpage_view,name='map2'),
+    path('notify',alert_notify_view,name='alert_notify'),
+    path('sendnotify',send_alert_notify_view,name="mark_read_notif"),
 ]

@@ -76,13 +76,20 @@
   
   .notification .badge {
     position: absolute;
-    top: 2px;
-    right:2px;
-    padding: 5px 10px;
+    top: 1px;
+    left:-1px;
+    padding: 5px 8px;
     border-radius: 50%;
-    background-color: rgb(237, 237, 237);
-    color:black
+    background-color: rgb(0, 0, 0);
+    
+ 
+  
+
   }
+  .badge{
+    color:rgb(255, 255, 255);
+  }
+ 
   .dropdown-content-two {
     display: none;
     position: absolute;
@@ -109,8 +116,5 @@
     background-color: #ddd;
   }
   
-  .dropdown-one:hover .dropdown-content-two {
-    display: block;
-  }
  
   

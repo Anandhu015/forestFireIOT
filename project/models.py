@@ -21,3 +21,9 @@ class login(models.Model):
     user_id=models.IntegerField(primary_key=true)
     username=models.CharField(max_length=20)
     password=models.CharField(max_length=20)
+class alert_notify(models.Model):
+    notify_detail=models.TextField()
+    read_by=models.BooleanField(default=False)
+    
+    def __str__(self):
+        return(self.notify_detail)

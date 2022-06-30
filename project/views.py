@@ -9,7 +9,7 @@ from gtts import gTTS
 from html5lib import serialize
 from django.core import serializers
 from django.http import JsonResponse
-from .models import Sensor_reading, secondSensor_reading
+from .models import Sensor_reading, alert_notify, secondSensor_reading
 import telegram 
 from django.conf import settings
 from pathlib import Path
@@ -38,6 +38,7 @@ def sensor_data_view(request):
             hum = dict['hum_reading']
             status = dict['device_status']
             smoke = dict['smoke_reading']
+            
             Sensor_reading.objects.create(device_id=id, temp_reading=temp, hum_reading=hum, device_status=status, gas_analog_reading=smoke)
         except:
 
@@ -74,7 +75,7 @@ def sensor_data_view(request):
         smoke_reading1=obj1.gas_analog_reading1
         device_status1=obj1.device_status1
         response={"id":device_id,"temp":temp_reading,"hum":hum_reading,"smoke":smoke_reading,"status":device_status,"id1":device_id1,"temp1":temp_reading1,"hum1":hum_reading1,"smoke1":smoke_reading1,"status1":device_status1}
-       
+        
         
     
                 
@@ -120,28 +121,55 @@ def alert_view(request):
     temp=float(obj.temp_reading)
     hum=float(obj.hum_reading)
     smoke = float(obj.gas_analog_reading)
-    if temp>20 and smoke>0:
+    device_status=obj.device_status
+    obj1=secondSensor_reading.objects.last()
+    device_id1=obj1.device_id1
+    temp_reading1=obj1.temp_reading1
+    hum_reading1=obj1.hum_reading1
+    smoke_reading1=obj1.gas_analog_reading1
+    device_status1=obj1.device_status1
+  
+    if temp>20 and smoke>1000:
                 value1="device_id:"+str(id)+"\n"+"temperature_value:"+str(temp)+"\n"+"humidity_value:"+str(hum)+"\n"+"smoke_sensor_reading:"+str(smoke)+"\n"
                 value1+="location:"+request.get_host()+"/map"
                 telegram_settings = settings.TELEGRAM
                 bot = telegram.Bot(token=telegram_settings['bot_token'])
                 bot.send_message(chat_id="@%s" % telegram_settings['channel_name'],
                                 text=value1, parse_mode=telegram.ParseMode.HTML)
+                response={"id":id,"temp":temp,"hum":hum,"smoke":smoke,"status":device_status}
                 
+    if temp_reading1>20 and smoke_reading1>1000:
+
+                value="device_id:"+str(device_id1)+"\n"+"temperature_value:"+str(temp_reading1)+"\n"+"humidity_value:"+str(hum_reading1)+"\n"+"smoke_sensor_reading:"+str(smoke_reading1)+"\n"
+                value+="location:"+request.get_host()+"/map"
+                telegram_settings1 = settings.TELEGRAM
+                bot1= telegram.Bot(token=telegram_settings1['bot_token'])
+                bot1.send_message(chat_id="@%s" % telegram_settings1['channel_name'],
+                                text=value, parse_mode=telegram.ParseMode.HTML)
+                response1={"id":device_id1,"temp":temp_reading1,"hum":hum_reading1,"smoke":smoke_reading1,"status":device_status1}
+                
+    
+    return JsonResponse({"obj":"nothing"})
+
                 # mytext="Hi ,"+str(request.user)
                 # mytext += ".device id:"+str(device_id)+"\n"+".temperature value:"+str(temp_reading)+"\n"+".humidity value:"+str(hum_reading)+"\n"+".smoke sensor reading:"+str(smoke_reading)+"\n"
                 # language = 'en'
-                # myobj = gTTS(text=mytext, lang=language, slow=False)
-               
-    # if temp_reading1>20 and smoke_reading1>1000:
+#get all notification
+def alert_notify_view(request):
+    data=alert_notify.objects.all().order_by('-id')
+    Jsonresponse=serializers.serialize('json',data)
+    return JsonResponse({"data":Jsonresponse})
+#mark all notifications
+def send_alert_notify_view(request):
+    noti=request.GET['notif']
+    
+    notify=alert_notify.objects.get(pk=noti)
+    notify.delete()
+   
+    return JsonResponse({"bool":True})
 
-    #             value1="device_id:"+str(device_id1)+"\n"+"temperature_value:"+str(temp_reading1)+"\n"+"humidity_value:"+str(hum_reading1)+"\n"+"smoke_sensor_reading:"+str(smoke_reading1)+"\n"
-    #             value1+="location:"+request.get_host()+"/map"
-    #             telegram_settings1 = settings.TELEGRAM
-    #             bot1= telegram.Bot(token=telegram_settings1['bot_token'])
-    #             bot1.send_message(chat_id="@%s" % telegram_settings1['channel_name'],
-    #                             text=value1, parse_mode=telegram.ParseMode.HTML)
+   
     
    
     
-    return render(request,"fire_alert.html",{})
+  
