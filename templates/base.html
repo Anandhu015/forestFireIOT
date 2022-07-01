@@ -53,7 +53,7 @@
         </a>
         <div id="con"  class="dropdown-content-two">
        
-          <p id="para" class="font-weight-bolder">Notifications (<b>2</b>) </p>
+          <p id="para" class="font-weight-bolder">Notifications (<b id="bold"></b>) </p>
                 <a id="destroy">close all</a>
           <div class="notify" id="notify">
               loading...
@@ -85,28 +85,9 @@
         dataType: 'json',
         success: function (data) {
             // storing json data in variables
-                id=data.obj.id;
-                 hum=data.obj.hum,
-                 temp=data.obj.temp;
-                 smoke=data.obj.smoke;
-                 status=data.obj.status;
-                  console.log("id:"+id);
-                  console.log("humidity"+hum);
-                  console.log("temperature"+temp);
+           
                   console.log(data);
-                //   al++;
-                //   document.getElementById("badge").innerHTML=al;
-                
-                // if(al==1){
-                //   document.getElementById("bell").style.color="red";
-                  
-                // }
-                // if(al==10){
-                //   al=0;
-                //   document.getElementById("badge").innerHTML=al;
-                //   document.getElementById("bell").style.color="white";
-                 
-                // }
+               
                
                    
          },
@@ -122,15 +103,24 @@
         success: function (res) {
             // storing json data in variables
                _html='';
-             
+                _count=res.count
+                $("#badge").text(String(_count));
+                $("#bold").text(String(_count));
+                if(_count>1){
+                  $("#bell").css("color","red");
+                }
+                else{
+                  $("#bell").css("color","white");
+                }
+
                _json=$.parseJSON(res.data);
                $.each(_json,function(index,d){
                 
-               
+                          
                           
                           if(d.fields.read_by ==false){
                               
-                            _html+= '<a class=" asif bg-light" data-index="'+d.pk+'" data-notif="'+d.pk+'" id="button-close" href="/map" style="text-decoration: none;color:rgb(0, 0, 0)'+d.pk+'">'+d.fields.notify_detail+'\
+                            _html+= '<a class=" asif bg-light" data-index="'+d.pk+'" device-id="'+d.fields.device_id+'"data-notif="'+d.pk+'" id="button-close" href="/map" style="text-decoration: none;color:rgb(0, 0, 0)'+d.pk+'">'+d.fields.notify_detail+'\
                               <p style="float:right;font-size:15px;margin-top:0px;">"'+d.fields.alert_time+'"</p><button style="float:right;display:none"class="btn btn-sm btn-success marked'+d.pk+'"> <i class="bi bi-check-circle-fill"></i></button></a>';
 
                           }
@@ -174,7 +164,8 @@
         })
          $(document).on("click","#button-close",function(){
           
-          
+          var _id=$(this).attr('device-id');
+          console.log("id:"+_id);
           var _index=$(this).attr('data-index');
           console.log("index"+_index);
 
@@ -183,18 +174,21 @@
           $.ajax({
              url: "{% url 'mark_read_notif' %}",
              data:{
-              notif:_notif
+              notif:_notif,
+              id:_id,
+
              },
              dataType: 'json',
              success: function (res) {
+              console.log("id:"+res.device_id);
               
-              if(res.bool==true){
-                    $(".asif"+_index).removeClass('bg-light');
+              // if(res.bool==true){
+              //       $(".asif"+_index).removeClass('bg-light');
                 
-                    $(".marked"+_index).show();
-                    console.log(res)
+              //       $(".marked"+_index).show();
+              //       console.log(res)
                     
-              }
+              // }
              }
             })
 

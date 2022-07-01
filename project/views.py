@@ -133,7 +133,7 @@ def alert_view(request):
     time=now.strftime('%I:%M:%S')
    
 
-    current_time = now.strftime("%H:%M:%S")
+  
   
     if temp>20 and smoke>1000:
                 val=alert_notify.objects.create(notify_detail="Alert!!!!!!"+"\n"+"Device_id:"+str(id), read_by=False,device_id=id,alert_time=time)
@@ -165,11 +165,15 @@ def alert_view(request):
 #get all notification
 def alert_notify_view(request):
     data=alert_notify.objects.all().order_by('-id')
+    count=alert_notify.objects.count()
+    print(count)
     Jsonresponse=serializers.serialize('json',data)
-    return JsonResponse({"data":Jsonresponse})
+    
+    return JsonResponse({"data":Jsonresponse,"count":count})
 #mark all notifications
 def send_alert_notify_view(request):
     noti=request.GET['notif']
+    id=request.GET['id']
     
    
        
@@ -177,7 +181,7 @@ def send_alert_notify_view(request):
     notify=alert_notify.objects.get(pk=noti)
     notify.delete()
    
-    return JsonResponse({"bool":True})
+    return JsonResponse({"device_id":id})
 def empty_notify_view(request):
     alert_notify.objects.all().delete() 
     return JsonResponse({"bool":True})

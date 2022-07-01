@@ -147,7 +147,7 @@ h4{
                     <!-- custom script!-->
                     <script>
                     //MAP
-                    var marker, l, lat, lon, loc= [["MASTER-NODE",9.305057109396975,77.07870483398439],["SUB-NODE",9.305061344719489, 77.08249855015312],["Fire Alert facility",9.3168764, 77.1422926]];
+                    var marker, l, lat, lon, loc= [["MASTER-NODE",9.305057109396975,77.07870483398439],["SUB-NODE",9.30815, 77.08291],["Fire Alert facility",9.3168764, 77.1422926]];
                     
                     var mymap = L.map('map', {
                         center: [9.335861618302411, 77.11815261631273],
@@ -159,9 +159,21 @@ h4{
                                    
                                 
                     });
-                    marker=L.marker([loc[0][1],loc[0][2]]).addTo(mymap).bindPopup("<b>Master-Node</b><br>"+"Latitude:"+loc[1][1]+"<br>Longitude:"+loc[1][2]);
-                    marker1=L.marker([loc[1][1],loc[1][2]]).addTo(mymap).bindPopup("<b>Sub-Node</b><br>"+"Latitude:"+loc[1][1]+"<br>Longitude:"+loc[1][2]);
-                    marker2=L.marker([loc[2][1],loc[2][2]]).addTo(mymap).bindPopup("<b>Fire Alert Facility</b><br>"+"Latitude:"+loc[2][1]+"<br>Longitude:"+loc[2][2]);
+                    var fontAwesomeIcon = L.icon({
+                        iconUrl:"{% static 'img/forest-fire.png'%}",
+                        iconSize:     [40, 40],
+                        popupAnchor: [0, -30] // size of the icon
+                    
+                    });
+                    var facilityIcon = L.icon({
+                        iconUrl:"{% static 'img/facility.png'%}",
+                        iconSize:     [40, 40],
+                        popupAnchor: [0, -30] // size of the icon
+                    
+                    });
+                    marker=L.marker([loc[0][1],loc[0][2]],{icon:fontAwesomeIcon}).addTo(mymap).bindPopup("<b>Master-Node</b><br>"+"Latitude:"+loc[1][1]+"<br>Longitude:"+loc[1][2]);
+                    marker1=L.marker([loc[1][1],loc[1][2]],{icon:fontAwesomeIcon}).addTo(mymap).bindPopup("<b>Sub-Node</b><br>"+"Latitude:"+loc[1][1]+"<br>Longitude:"+loc[1][2]);
+                    marker2=L.marker([loc[2][1],loc[2][2]],{icon:facilityIcon}).addTo(mymap).bindPopup("<b>Fire Alert Facility</b><br>"+"Latitude:"+loc[2][1]+"<br>Longitude:"+loc[2][2]);
                    
                     $('#myModal').on('show.bs.modal', function () {
                             setTimeout(function () {
@@ -188,7 +200,8 @@ h4{
                                                 fitSelectedRoutes:false,
                                                 createMarker: function() { return null; },
                                                 lineOptions: {
-                                                addWaypoints: false
+                                                addWaypoints: false,
+                                                
                                             }
                                         }).addTo(mymap);
 

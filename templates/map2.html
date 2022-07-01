@@ -1,4 +1,5 @@
 {% extends "base.html"%}
+{% load static %}
 {% block content %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -46,9 +47,11 @@
     <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=UWza1mg07PcrcozmRW9rKGazhHWaWhC9"></script>
         <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=UWza1mg07PcrcozmRW9rKGazhHWaWhC9"></script>
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
         <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
-        <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+        <link rel="stylesheet" href="{% static 'css/leaflet-routing-machine.css'%}" />
+        <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+        <script src="{% static 'js/leaflet-routing-machine.js' %}"></script>
 
 
 
@@ -64,10 +67,10 @@
 <!-- custom script!-->
 <script>
 //MAP
-var theMarker,num=0, l, lat, lon, loc=[["MASTER-NODE",9.305057109396975,77.07870483398439],["SUB-NODE",9.305061344719489, 77.08249855015312],["Fire Alert facility",9.3168764, 77.1422926]];
+var theMarker,num=0, l, lat, lon, loc=[["MASTER-NODE",9.305057109396975,77.07870483398439],["SUB-NODE",9.30815, 77.08291],["Fire Alert facility",9.3168764, 77.1422926],['firetruck',9.31605, 77.14075]];
 var mymap = L.map('map', {
-    center: [23.19754890462487, 78.41209640782134],
-    zoom: 5
+    center: [9.335861618302411, 77.11815261631273],
+    zoom: 9,
     
 });
 
@@ -76,18 +79,68 @@ googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}'
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
            }).addTo(mymap);
 //BASEMAPS
-mymap.flyTo([9.304913114863282,77.07547760219313],15)
-marker=L.marker([loc[0][1],loc[0][2]]).on('click', onMapClick).addTo(mymap);
-marker1=L.marker([loc[1][1],loc[1][2]]).on('click', onMapClick).addTo(mymap);
+mymap.flyTo([9.322056244079944,77.10464286908973],14)
+var fontAwesomeIcon = L.icon({
+    iconUrl:"{% static 'img/forest-fire.png'%}",
+    iconSize:     [40, 40],
+    popupAnchor: [0, -30] // size of the icon
+  
+});
+var facilityIcon = L.icon({
+    iconUrl:"{% static 'img/facility.png'%}",
+    iconSize:     [40, 40],
+    popupAnchor: [0, -30] // size of the icon
+  
+});
+var truckIcon = L.icon({
+    iconUrl:"{% static 'img/firetruck.png'%}",
+    iconSize:     [40, 40],
+    popupAnchor: [0, -30] // size of the icon
+  
+});
 
-var popup = L.popup();
 
 
+
+marker=L.marker([loc[0][1],loc[0][2]],{ icon:  fontAwesomeIcon}).on('click', onMasterClick).addTo(mymap);
+marker1=L.marker([loc[1][1],loc[1][2]],{ icon:  fontAwesomeIcon}).on('click', onSubClick).addTo(mymap);
+marker2=L.marker([loc[2][1],loc[2][2]],{ icon:  facilityIcon}).on('click', onClick).addTo(mymap);
+marker3=L.marker([loc[3][1],loc[3][2]],{icon:truckIcon}).addTo(mymap);
+
+
+// mymap.on('click',function(e){
+//     alert(e.latlng);
+// })
+
+   
+    L.Routing.control({
+
+    waypoints: [
+        L.latLng([loc[2][1],loc[2][2]]),
+        L.latLng([loc[0][1],loc[0][2]])
+    ],
+    draggableWaypoints:false,
+    fitSelectedRoutes:false,
+    createMarker: function() { return null; },
+    lineOptions: {
+    addWaypoints: false},
+    }).on('routesfound', function(e) {
+    console.log(e);
+    e.routes[0].coordinates.forEach(function(coord,index){
+        setTimeout(function(){
+            marker3.setLatLng([coord.lat,coord.lng]);
+        },50*index)
+        
+    });
+
+    }).addTo(mymap);
 //popup function
-function onMapClick(e) {
+function onMasterClick(e) {
+    
+    var popup = L.popup();
     popup
         .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString()) //esample from leaflet, will be immediately replaced by weatherpopup...
+        .setContent("Loading....") //esample from leaflet, will be immediately replaced by weatherpopup...
         .openOn(mymap);
     
   
@@ -183,14 +236,8 @@ function onMapClick(e) {
                             temp = data.obj.temp;
                             smoke = data.obj.smoke;
                             status = data.obj.status;
-                            temp1 = data.obj.temp1
-                            hum1 = data.obj.hum1,
-                            temp1 = data.obj.temp1;
-                            smoke1 = data.obj.smoke1;
-                            status1 = data.obj.status1;
-                            console.log(typeof(status));
-                            console.log(typeof(status1));
-                            console.log(temp1);
+                            
+                            
                             if (status==='true') {
                                 status = "active"
 
@@ -202,6 +249,141 @@ function onMapClick(e) {
                                 smoke="__";
 
                             }
+                           
+                           
+                            var fontsizesmall = 2;
+                            popup.setContent("MASTER-NODE<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br><br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription  + "<br>Device_Status:" + status + "<br><br>Temperature: " + temp +"°C <br>Humidityt:" + hum + "%" + "<br>Smoke_Level:" + smoke + "ppm<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "<br>Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
+                            
+                            
+                        },
+
+
+
+                    });
+
+                },2000);
+                
+                
+            
+                //Popup with content
+                
+                
+
+
+            },
+            
+            error: function () {
+                alert("error receiving wind data from openweathermap");
+            }
+        });
+        
+    });
+//getting json function ends here
+
+//popupfunction ends here
+}
+function onSubClick(e) {
+    var popup = L.popup();
+    popup
+        .setLatLng(e.latlng)
+        .setContent("Loading...") //esample from leaflet, will be immediately replaced by weatherpopup...
+        .openOn(mymap);
+    
+  
+
+
+    //getting json function
+    $(document).ready(function () {
+       
+        $.ajax({
+            url: "https://api.openweathermap.org/data/2.5/weather?lat=" + e.latlng.lat + '&lon=' + e.latlng.lng + "&appid=328616f141b7ac8591db5a9b39ceeead",
+            dataType: 'json',
+            success: function (data) {
+                // storing json data in variables
+                weatherlocation_lon = data.coord.lon; // lon WGS84
+                weatherlocation_lat = data.coord.lat; // lat WGS84
+                weatherstationname = data.name // Name of Weatherstation
+                weatherstationid = data.id // ID of Weatherstation
+                weathertime = data.dt // Time of weatherdata (UTC)
+                temperature = data.main.temp; // Kelvin
+                airpressure = data.main.pressure; // hPa
+                airhumidity = data.main.humidity; // %
+                temperature_min = data.main.temp_min; // Kelvin
+                temperature_max = data.main.temp_max; // Kelvin
+                windspeed = data.wind.speed; // Meter per second
+                winddirection = data.wind.deg; // Wind from direction x degree from north
+                cloudcoverage = data.clouds.all; // Cloudcoverage in %
+                weatherconditionid = data.weather[0].id // ID
+                weatherconditionstring = data.weather[0].main // Weatheartype
+                weatherconditiondescription = data.weather[0].description // Weatherdescription
+                weatherconditionicon = data.weather[0].icon // ID of weathericon
+
+                // Converting Unix UTC Time
+                var utctimecalc = new Date(weathertime * 1000);
+                var months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+                var year = utctimecalc.getFullYear();
+                var month = months[utctimecalc.getMonth()];
+                var date = utctimecalc.getDate();
+                var hour = utctimecalc.getHours();
+                var min = utctimecalc.getMinutes();
+                var sec = utctimecalc.getSeconds();
+                var time = date + '.' + month + '.' + year + ' ' + hour + ':' + min + ' Uhr';
+
+                // recalculating
+                var weathercondtioniconhtml = "http://openweathermap.org/img/w/" + weatherconditionicon + ".png";
+                var weathertimenormal = time; // reallocate time var....
+                var temperaturecelsius = Math.round((temperature - 273) * 100) / 100;  // Converting Kelvin to Celsius
+                var windspeedknots = Math.round((windspeed * 1.94) * 100) / 100; // Windspeed from m/s in Knots; Round to 2 decimals
+                var windspeedkmh = Math.round((windspeed * 3.6) * 100) / 100; // Windspeed from m/s in km/h; Round to 2 decimals
+                var winddirectionstring = "Im the wind from direction"; // Wind from direction x as text
+                if (winddirection > 348.75 && winddirection <= 11.25) {
+                    winddirectionstring = "North";
+                } else if (winddirection > 11.25 && winddirection <= 33.75) {
+                    winddirectionstring = "Northnortheast";
+                } else if (winddirection > 33.75 && winddirection <= 56.25) {
+                    winddirectionstring = "Northeast";
+                } else if (winddirection > 56.25 && winddirection <= 78.75) {
+                    winddirectionstring = "Eastnortheast";
+                } else if (winddirection > 78.75 && winddirection <= 101.25) {
+                    winddirectionstring = "East";
+                } else if (winddirection > 101.25 && winddirection <= 123.75) {
+                    winddirectionstring = "Eastsoutheast";
+                } else if (winddirection > 123.75 && winddirection <= 146.25) {
+                    winddirectionstring = "Southeast";
+                } else if (winddirection > 146.25 && winddirection <= 168.75) {
+                    winddirectionstring = "Southsoutheast";
+                } else if (winddirection > 168.75 && winddirection <= 191.25) {
+                    winddirectionstring = "South";
+                } else if (winddirection > 191.25 && winddirection <= 213.75) {
+                    winddirectionstring = "Southsouthwest";
+                } else if (winddirection > 213.75 && winddirection <= 236.25) {
+                    winddirectionstring = "Southwest";
+                } else if (winddirection > 236.25 && winddirection <= 258.75) {
+                    winddirectionstring = "Westsouthwest";
+                } else if (winddirection > 258.75 && winddirection <= 281.25) {
+                    winddirectionstring = "West";
+                } else if (winddirection > 281.25 && winddirection <= 303.75) {
+                    winddirectionstring = "Westnorthwest";
+                } else if (winddirection > 303.75 && winddirection <= 326.25) {
+                    winddirectionstring = "Northwest";
+                } else if (winddirection > 326.25 && winddirection <= 348.75) {
+                    winddirectionstring = "Northnorthwest";
+                } else {
+                    winddirectionstring = " - currently no winddata available - ";
+                };
+                var temp,hum,smoke;
+                setInterval(function(){
+                    $.ajax({
+                        url: "{% url 'sensor' %}",
+                        dataType: "json",
+                        success: function (data) {
+                           
+                            temp1 = data.obj.temp1
+                            hum1 = data.obj.hum1,
+                            temp1 = data.obj.temp1;
+                            smoke1 = data.obj.smoke1;
+                            status1 = data.obj.status1;
+                            
                             if (status1==true) {
                                 status1 = "active"
 
@@ -215,8 +397,8 @@ function onMapClick(e) {
                             }
                            
                             var fontsizesmall = 2;
-                            popup.setContent("MASTER-NODE<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br><br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription  + "<br>Device_Status:" + status + "<br><br>Temperature: " + temp +"°C <br>Humidityt:" + hum + "%" + "<br>Smoke_Level:" + smoke + "ppm<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "<br>Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
-                            // popup1.setContent("SUB-NODE<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br><br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription  + "<br>Device_Status:" + status1 + "<br><br>Temperature: " + temp1 +"°C <br>Humidityt:" + hum1 + "%" + "<br>Smoke_Level:" + smoke1 + "ppm<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "<br>Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
+                           
+                            popup.setContent("SUB-NODE<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br><br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription  + "<br>Device_Status:" + status1 + "<br><br>Temperature: " + temp1 +"°C <br>Humidityt:" + hum1 + "%" + "<br>Smoke_Level:" + smoke1 + "ppm<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "<br>Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
                             
                         },
 
@@ -224,7 +406,117 @@ function onMapClick(e) {
 
                     });
 
-                },5000);
+                },2000);
+                
+                
+            
+                //Popup with content
+                
+                
+
+
+            },
+            
+            error: function () {
+                alert("error receiving wind data from openweathermap");
+            }
+        });
+        
+    });
+//getting json function ends here
+
+//popupfunction ends here
+}
+function onClick(e) {
+    var popup = L.popup();
+    popup
+        .setLatLng(e.latlng)
+        .setContent("Loading...") //esample from leaflet, will be immediately replaced by weatherpopup...
+        .openOn(mymap);
+    
+  
+
+
+    //getting json function
+    $(document).ready(function () {
+       
+        $.ajax({
+            url: "https://api.openweathermap.org/data/2.5/weather?lat=" + e.latlng.lat + '&lon=' + e.latlng.lng + "&appid=328616f141b7ac8591db5a9b39ceeead",
+            dataType: 'json',
+            success: function (data) {
+                // storing json data in variables
+                weatherlocation_lon = data.coord.lon; // lon WGS84
+                weatherlocation_lat = data.coord.lat; // lat WGS84
+                weatherstationname = data.name // Name of Weatherstation
+                weatherstationid = data.id // ID of Weatherstation
+                weathertime = data.dt // Time of weatherdata (UTC)
+                temperature = data.main.temp; // Kelvin
+                airpressure = data.main.pressure; // hPa
+                airhumidity = data.main.humidity; // %
+                temperature_min = data.main.temp_min; // Kelvin
+                temperature_max = data.main.temp_max; // Kelvin
+                windspeed = data.wind.speed; // Meter per second
+                winddirection = data.wind.deg; // Wind from direction x degree from north
+                cloudcoverage = data.clouds.all; // Cloudcoverage in %
+                weatherconditionid = data.weather[0].id // ID
+                weatherconditionstring = data.weather[0].main // Weatheartype
+                weatherconditiondescription = data.weather[0].description // Weatherdescription
+                weatherconditionicon = data.weather[0].icon // ID of weathericon
+
+                // Converting Unix UTC Time
+                var utctimecalc = new Date(weathertime * 1000);
+                var months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+                var year = utctimecalc.getFullYear();
+                var month = months[utctimecalc.getMonth()];
+                var date = utctimecalc.getDate();
+                var hour = utctimecalc.getHours();
+                var min = utctimecalc.getMinutes();
+                var sec = utctimecalc.getSeconds();
+                var time = date + '.' + month + '.' + year + ' ' + hour + ':' + min + ' Uhr';
+
+                // recalculating
+                var weathercondtioniconhtml = "http://openweathermap.org/img/w/" + weatherconditionicon + ".png";
+                var weathertimenormal = time; // reallocate time var....
+                var temperaturecelsius = Math.round((temperature - 273) * 100) / 100;  // Converting Kelvin to Celsius
+                var windspeedknots = Math.round((windspeed * 1.94) * 100) / 100; // Windspeed from m/s in Knots; Round to 2 decimals
+                var windspeedkmh = Math.round((windspeed * 3.6) * 100) / 100; // Windspeed from m/s in km/h; Round to 2 decimals
+                var winddirectionstring = "Im the wind from direction"; // Wind from direction x as text
+                if (winddirection > 348.75 && winddirection <= 11.25) {
+                    winddirectionstring = "North";
+                } else if (winddirection > 11.25 && winddirection <= 33.75) {
+                    winddirectionstring = "Northnortheast";
+                } else if (winddirection > 33.75 && winddirection <= 56.25) {
+                    winddirectionstring = "Northeast";
+                } else if (winddirection > 56.25 && winddirection <= 78.75) {
+                    winddirectionstring = "Eastnortheast";
+                } else if (winddirection > 78.75 && winddirection <= 101.25) {
+                    winddirectionstring = "East";
+                } else if (winddirection > 101.25 && winddirection <= 123.75) {
+                    winddirectionstring = "Eastsoutheast";
+                } else if (winddirection > 123.75 && winddirection <= 146.25) {
+                    winddirectionstring = "Southeast";
+                } else if (winddirection > 146.25 && winddirection <= 168.75) {
+                    winddirectionstring = "Southsoutheast";
+                } else if (winddirection > 168.75 && winddirection <= 191.25) {
+                    winddirectionstring = "South";
+                } else if (winddirection > 191.25 && winddirection <= 213.75) {
+                    winddirectionstring = "Southsouthwest";
+                } else if (winddirection > 213.75 && winddirection <= 236.25) {
+                    winddirectionstring = "Southwest";
+                } else if (winddirection > 236.25 && winddirection <= 258.75) {
+                    winddirectionstring = "Westsouthwest";
+                } else if (winddirection > 258.75 && winddirection <= 281.25) {
+                    winddirectionstring = "West";
+                } else if (winddirection > 281.25 && winddirection <= 303.75) {
+                    winddirectionstring = "Westnorthwest";
+                } else if (winddirection > 303.75 && winddirection <= 326.25) {
+                    winddirectionstring = "Northwest";
+                } else if (winddirection > 326.25 && winddirection <= 348.75) {
+                    winddirectionstring = "Northnorthwest";
+                } else {
+                    winddirectionstring = " - currently no winddata available - ";
+                };
+                popup.setContent("FOREST-FIRE FACILITY<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription   + "<br>Temperature: " + temperature +"k <br>Humidityt:" + airhumidity + "%" +"<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "<br>Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
                 
                 
             
