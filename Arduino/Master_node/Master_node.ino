@@ -2,6 +2,7 @@
 
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <string.h>
 #include "DHT.h" // DHT library from Adafruit
 //Adafruit Unified Sensor library.
 
@@ -15,7 +16,7 @@ const char* password = "alien@123";
 char simple_json1[200];
 char json[200];
 //Your Domain name with URL path or IP address with path
-const char* serverName = "http://192.168.121.158:8000/readings";
+const char* serverName = "http://192.168.134.157:8000/readings";
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
@@ -94,11 +95,22 @@ void server_Connection(const char* serverName,float humi,float temp,int gasanalo
       }
       Serial.println("device_status:");
       Serial.print(device_status);
+      Serial.println("device_status:");
+      Serial.print(device_status1);
+      
+      boolean device;
+      if(device_status1.equals("true") ){
+        device=true;
+      }
+      else{
+        device=false;
+      }
       
       sprintf(simple_json1, "{\"device_id\":\"%d\",\"temp_reading\":\"%.2f\",\"hum_reading\":\"%.2f\",\"device_status\":\"%d\",\"smoke_reading\":\"%d\"}", 1, temp, humi,device_status,gasanalog);
       int httpResponseCode1 = http.POST(simple_json1);
       delay(1000);
-      sprintf(json, "{\"device_id\":\"%d\",\"temp_reading1\":\"%s\",\"hum_reading1\":\"%s\",\"device_status\":\"%d\",\"gas_analog_reading1\":\"%s\"}", 2,temperature_value,humidity_value,boolean(device_status1),gas_analog);
+      
+      sprintf(json, "{\"device_id\":\"%d\",\"temp_reading1\":\"%s\",\"hum_reading1\":\"%s\",\"device_status\":\"%s\",\"gas_analog_reading1\":\"%s\"}", 2,temperature_value,humidity_value,device_status1,gas_analog);
       
       //sending post request
      
@@ -209,7 +221,7 @@ void loop() {
     delay(1000);
   }
 
-  if (gassensorAnalog > 1000 && temp > 30) {
+  if (gassensorAnalog > 1000 && temp > 25) {
     Serial.println("Gas");
     Serial.println(gassensorAnalog);
     analogWrite(pin_red, 255);

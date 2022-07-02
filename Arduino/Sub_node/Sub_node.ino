@@ -30,10 +30,12 @@ void turn_ON_WIFI() {
   delay(2000);
 }
 //-------------------------------------
-void sendDataTocentralNode(  String post_request, String resource_path, float humi, float temp, int gassensorAnalog, int gassensorDigital, boolean device_status) {
+void sendDataTocentralNode(  String post_request, String resource_path, float humi, float temp, int gassensorAnalog, int gassensorDigital, boolean device_status1) {
+   Serial.println("device_status");
+  Serial.print(device_status1);
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
-    String serverPath = post_request + resource_path + "?tmp_value=" + String(temp) + "&hum_value=" + String(humi) + "&gasanalog_value=" + String(gassensorAnalog) + "&gasdigital_value=" + String(gassensorDigital) + "&status=" + String(device_status);
+    String serverPath = post_request + resource_path + "?tmp_value=" + String(temp) + "&hum_value=" + String(humi) + "&gasanalog_value=" + String(gassensorAnalog) + "&gasdigital_value=" + String(gassensorDigital) + "&status=" + String(device_status1);
     http.begin(serverPath.c_str());
     int httpResponseCode = http.GET();
     if (httpResponseCode > 0) {
@@ -51,20 +53,6 @@ void sendDataTocentralNode(  String post_request, String resource_path, float hu
   }
 
   delay(3000);
-}
-
-void led_buzzer() {
-  analogWrite(pin_red, 255);
-  analogWrite(pin_green, 0);
-  digitalWrite (Buzzer, HIGH) ; //send tone
-  delay(1000);
-  analogWrite(pin_red, 0);
-  analogWrite(pin_green, 0);
-  digitalWrite (Buzzer, LOW) ;
-  delay(1000);//no tone
-
-
-
 }
 //---------------------------------------------------
 
@@ -91,24 +79,20 @@ void loop() {
 
   humi = dht.readHumidity();
   temp = dht.readTemperature();
-  if (isnan(humi) && isnan(temp)) {
 
-
-  }
-  else {
-    Serial.print("Temperature: ");
-    Serial.print(temp);
-    Serial.print("ºC ");
-    Serial.print("Humidity: ");
-    Serial.println(humi);
-    delay(2000);
-  }
-
-  if (gassensorAnalog > 1000 && temp > 30) {
+  if (gassensorAnalog > 1000 && temp > 25) {
+   
     Serial.println("Gas");
     Serial.println(gassensorAnalog);
-    led_buzzer();
-
+    analogWrite(pin_red, 255);
+    analogWrite(pin_green, 0);
+    digitalWrite (Buzzer, HIGH) ; //send tone
+    delay(1000);
+    analogWrite(pin_red, 0);
+    analogWrite(pin_green, 0);
+    digitalWrite (Buzzer, LOW) ;
+    delay(1000);//no tone
+    
 
   }
   else {
@@ -131,8 +115,7 @@ void loop() {
     device_status1 = true;
 
   }
-   Serial.print("device_status");
-  Serial.println(device_status1);
+  
   sendDataTocentralNode(post_request, resource_path, humi, temp, gassensorAnalog, gassensorDigital, device_status1);
 
 }
