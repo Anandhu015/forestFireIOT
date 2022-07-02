@@ -154,24 +154,8 @@ lineOptions: {
 },
 }).addTo(mymap);
 
-    var count=0;
-  
-    var helloPopup = L.popup().setContent('Hello World!');
-    $('#addRoute').on('click', function () {
-       
-            // var route=L.Routing.control({
 
-            //     waypoints: [
-            //         L.latLng([loc[2][1], loc[2][2]]),
-            //         L.latLng([loc[0][1], loc[0][2]])
-            //     ],
-            //     draggableWaypoints: false,
-            //     fitSelectedRoutes: false,
-            //     createMarker: function () { return null; },
-            //     lineOptions: {
-            //         addWaypoints: false
-            //     },
-            // }).addTo(mymap);
+    $('#addRoute').on('click', function () {
            
         route.on('routesfound', function (e) {
             console.log(e);

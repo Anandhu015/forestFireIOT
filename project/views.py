@@ -14,6 +14,7 @@ from .models import Sensor_reading, alert_notify, secondSensor_reading
 import telegram 
 from django.conf import settings
 from pathlib import Path
+import numpy as num
 
 from gtts import gTTS
 
@@ -119,9 +120,13 @@ def map_view(request):
 def alert_view(request):
     obj=Sensor_reading.objects.last()
     id=obj.device_id
-    temp=float(obj.temp_reading)
-    hum=float(obj.hum_reading)
-    smoke = float(obj.gas_analog_reading)
+   
+    temp=obj.temp_reading
+    
+
+    hum=obj.hum_reading
+   
+    smoke = obj.gas_analog_reading
     device_status=obj.device_status
     obj1=secondSensor_reading.objects.last()
     device_id1=obj1.device_id1
@@ -132,30 +137,34 @@ def alert_view(request):
     now = datetime.datetime.now()
     time=now.strftime('%I:%M:%S')
    
-
-  
-  
-    if temp>20 and smoke>1000:
-                val=alert_notify.objects.create(notify_detail="Alert!!!!!!"+"\n"+"Device_id:"+str(id), read_by=False,device_id=id,alert_time=time)
-               
-                value1="device_id:"+str(id)+"\n"+"temperature_value:"+str(temp)+"\n"+"humidity_value:"+str(hum)+"\n"+"smoke_sensor_reading:"+str(smoke)+"\n"
-                value1+="location:"+request.get_host()+"/map"
-                telegram_settings = settings.TELEGRAM
-                bot = telegram.Bot(token=telegram_settings['bot_token'])
-                bot.send_message(chat_id="@%s" % telegram_settings['channel_name'],
-                                text=value1, parse_mode=telegram.ParseMode.HTML)
-                response={"id":id,"temp":temp,"hum":hum,"smoke":smoke,"status":device_status}
+    if temp is not None  and  hum is not None and smoke is not None :
+        
+        if temp>20 and smoke>1000:
+                    val=alert_notify.objects.create(notify_detail="Alert!!!!!!"+"\n"+"Device_id:"+str(id), read_by=False,device_id=id,alert_time=time)
                 
-    if temp_reading1>20 and smoke_reading1>1000:
-                val=alert_notify.objects.create(notify_detail="Alert!!!!!!"+"\n"+"Device_id:"+str(device_id1), read_by=False,device_id=device_id1,alert_time=time)
-                value="device_id:"+str(device_id1)+"\n"+"temperature_value:"+str(temp_reading1)+"\n"+"humidity_value:"+str(hum_reading1)+"\n"+"smoke_sensor_reading:"+str(smoke_reading1)+"\n"
-                value+="location:"+request.get_host()+"/map"
-                telegram_settings1 = settings.TELEGRAM
-                bot1= telegram.Bot(token=telegram_settings1['bot_token'])
-                bot1.send_message(chat_id="@%s" % telegram_settings1['channel_name'],
-                                text=value, parse_mode=telegram.ParseMode.HTML)
-                response1={"id":device_id1,"temp":temp_reading1,"hum":hum_reading1,"smoke":smoke_reading1,"status":device_status1}
-                
+                    value1="device_id:"+str(id)+"\n"+"temperature_value:"+str(temp)+"\n"+"humidity_value:"+str(hum)+"\n"+"smoke_sensor_reading:"+str(smoke)+"\n"
+                    value1+="location:"+request.get_host()+"/map"
+                    telegram_settings = settings.TELEGRAM
+                    bot = telegram.Bot(token=telegram_settings['bot_token'])
+                    bot.send_message(chat_id="@%s" % telegram_settings['channel_name'],
+                                    text=value1, parse_mode=telegram.ParseMode.HTML)
+                    response={"id":id,"temp":temp,"hum":hum,"smoke":smoke,"status":device_status}
+    else:
+        print("error")
+    if  temp_reading1 is  not None and hum_reading1 is not None and smoke_reading1 is not  None :          
+        if temp_reading1>20 and smoke_reading1>1000:
+                    val=alert_notify.objects.create(notify_detail="Alert!!!!!!"+"\n"+"Device_id:"+str(device_id1), read_by=False,device_id=device_id1,alert_time=time)
+                    value="device_id:"+str(device_id1)+"\n"+"temperature_value:"+str(temp_reading1)+"\n"+"humidity_value:"+str(hum_reading1)+"\n"+"smoke_sensor_reading:"+str(smoke_reading1)+"\n"
+                    value+="location:"+request.get_host()+"/map"
+                    telegram_settings1 = settings.TELEGRAM
+                    bot1= telegram.Bot(token=telegram_settings1['bot_token'])
+                    bot1.send_message(chat_id="@%s" % telegram_settings1['channel_name'],
+                                    text=value, parse_mode=telegram.ParseMode.HTML)
+                    response1={"id":device_id1,"temp":temp_reading1,"hum":hum_reading1,"smoke":smoke_reading1,"status":device_status1}
+    else:
+        print("error")
+       
+                    
     
     return JsonResponse({"obj":"nothing"})
 
