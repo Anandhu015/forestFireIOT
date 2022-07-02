@@ -185,6 +185,8 @@ def send_alert_notify_view(request):
 def empty_notify_view(request):
     alert_notify.objects.all().delete() 
     return JsonResponse({"bool":True})
+def weathermap_view(request):
+    return render(request,"weathermap.html")
 
 
    
