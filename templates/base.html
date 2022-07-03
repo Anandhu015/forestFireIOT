@@ -33,7 +33,7 @@
    
    <div class="navbar-one">
      <a href="/home" style="text-decoration: none;color:white">Home</a>
-     <a href="/map"  style="text-decoration: none;color:white">map</a>
+     <a href="/alertmap"  style="text-decoration: none;color:white">map</a>
      <div class="dropdown-one">
        <button class="dropbtn-one">Dropdown 
          <i class="fa fa-caret-down"></i>
@@ -106,7 +106,7 @@
                 _count=res.count
                 $("#badge").text(String(_count));
                 $("#bold").text(String(_count));
-                if(_count>1){
+                if(_count>=1){
                   $("#bell").css("color","red");
                 }
                 else{
@@ -120,7 +120,7 @@
                           
                           if(d.fields.read_by ==false){
                               
-                            _html+= '<a class=" asif bg-light" data-index="'+d.pk+'" device-id="'+d.fields.device_id+'"data-notif="'+d.pk+'" id="button-close" href="/map" style="text-decoration: none;color:rgb(0, 0, 0)'+d.pk+'">'+d.fields.notify_detail+'\
+                            _html+= '<a class=" asif bg-light" data-index="'+d.pk+'" device-id="'+d.fields.device_id+'"data-notif="'+d.pk+'" id="button-close" href="/weathermap" style="text-decoration: none;color:rgb(0, 0, 0)'+d.pk+'">'+d.fields.notify_detail+'\
                               <p style="float:right;font-size:15px;margin-top:0px;">"'+d.fields.alert_time+'"</p><button style="float:right;display:none"class="btn btn-sm btn-success marked'+d.pk+'"> <i class="bi bi-check-circle-fill"></i></button></a>';
 
                           }
@@ -175,7 +175,7 @@
              url: "{% url 'mark_read_notif' %}",
              data:{
               notif:_notif,
-              id:_id,
+           
 
              },
              dataType: 'json',
@@ -191,7 +191,8 @@
               // }
              }
             })
-
+         
+           
          })
         });
               

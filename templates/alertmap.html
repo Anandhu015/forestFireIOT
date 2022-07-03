@@ -36,14 +36,14 @@
     z-index: -2;
 }
 .addroute{
-    width: 25px;
+    width: 36px;
     
    
 }
 .leaflet-routing-container.leaflet-bar.leaflet-control{
     margin-top: 450px;
 }
-#addRoute{
+#advanced{
     border-radius: 50%;
     width: 45px;
     height: 40px;
@@ -53,11 +53,22 @@
     background-color: transparent;
    
 }
-#addRoute:hover{
-    background-color: rgb(199, 186, 186);
+
+.addMore{
+  border: none;
+  width: 32px;
+  height: 32px;
+  background-color: #eee;
+  transition: all ease-in-out 0.2s;
+  cursor: pointer;
 }
+.addMore:hover{
+  border: 1px solid #888;
+  background-color: #ddd;
+}
+
 </style>
-<link rel="stylesheet" href="{% static 'css/leaflet.css'%}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.4.0/leaflet.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -67,24 +78,24 @@
 <body>
     <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=UWza1mg07PcrcozmRW9rKGazhHWaWhC9"></script>
         <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=UWza1mg07PcrcozmRW9rKGazhHWaWhC9"></script>
-  
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
         <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
        
         
-        <link rel="stylesheet" href="{% static 'css/leaflet-routing-machine.css'%}" />
+        
         <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
         <script src="{% static 'js/leaflet-routing-machine.js' %}"></script>
         <script src="{% static 'js/easy-button.js' %}"></script>
         <link rel="stylesheet" href="{% static 'css/easy-button.css'%}" />
+        <link rel="stylesheet" href="{% static 'css/leaflet-routing-machine.css'%}" />
 
 
 <!-- mapbox -->
+
 <div id="map" class="map"></div>
 <!-- routing -->
-<button id="addRoute" ><img class="addroute" src="{% static 'img/alertfire.png'%}"></button>
 
-
-	
 
 		
 
@@ -95,9 +106,8 @@
 <!-- custom script!-->
 <script>
 //MAP
-
 var theMarker,num=0, l, lat, lon, loc=[["MASTER-NODE",9.305057109396975,77.07870483398439],["SUB-NODE",9.30815, 77.08291],["Fire Alert facility",9.3168764, 77.1422926],['firetruck',9.31605, 77.14075]];
-var arr=[[9.32088,77.11814],[9.31462,77.10351],[9.31717,77.07907],[9.31182,77.06652],[9.30867,77.073],[9.305057109396975,77.07870483398439]]
+
 var mymap = L.map('map', {
     center: [9.335861618302411, 77.11815261631273],
     zoom: 9,
@@ -109,7 +119,7 @@ googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}'
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
            }).addTo(mymap);
 //BASEMAPS
-mymap.flyTo([9.31272, 77.11242],14)
+mymap.flyTo([9.32263, 77.11893],14)
 var fontAwesomeIcon = L.icon({
     iconUrl:"{% static 'img/forest-fire.png'%}",
     iconSize:     [40, 40],
@@ -131,136 +141,17 @@ var truckIcon = L.icon({
 
 
 
-// alert("{{re}}")
+
 marker=L.marker([loc[0][1],loc[0][2]],{ icon:  fontAwesomeIcon}).on('click', onMasterClick).addTo(mymap);
 marker1=L.marker([loc[1][1],loc[1][2]],{ icon:  fontAwesomeIcon}).on('click', onSubClick).addTo(mymap);
 marker2=L.marker([loc[2][1],loc[2][2]],{ icon:  facilityIcon}).on('click', onClick).addTo(mymap);
-marker3=L.marker([loc[3][1],loc[3][2]],{icon:truckIcon}).addTo(mymap);
+
 
 
 // mymap.on('click',function(e){
 //     alert(e.latlng);
 // })
-var route=L.Routing.control({
 
-waypoints: [
-    L.latLng([loc[2][1], loc[2][2]]),
-    L.latLng([loc[0][1], loc[0][2]])
-],
-draggableWaypoints: false,
-fitSelectedRoutes: false,
-createMarker: function () { return null; },
-lineOptions: {
-    addWaypoints: false
-},
-}).addTo(mymap);
-
-    var count=0;
-    $('#addRoute').on('click', function () {
-           count=count+1;
-        route.on('routesfound', function (e) {
-            console.log(e);
-            // console.table(arr[0][0])
-
-        
-            e.routes[0].coordinates.forEach(function (coord, index) {
-                // setTimeout(function () {
-                //     marker3.setLatLng([coord.lat, coord.lng]);
-                // }, 50 * index)
-                console.log(count);
-               if(count==1){
-                    if(coord.lat == arr[0][0] && coord.lng==arr[0][1]){
-                        marker3.setLatLng([coord.lat, coord.lng]);
-                        route.spliceWaypoints(0,1,[coord.lat,coord.lng])
-                       
-                    }
-
-               }
-               else if(count==2){
-                    if(coord.lat == arr[1][0] && coord.lng==arr[1][1]){
-                        marker3.setLatLng([coord.lat, coord.lng]);
-                        route.spliceWaypoints(0,1,[coord.lat,coord.lng])
-                    }
-
-               }
-                else if(count==3){
-                    if(coord.lat == arr[2][0] && coord.lng==arr[2][1]){
-                     marker3.setLatLng([coord.lat, coord.lng]);
-                     route.spliceWaypoints(0,1,[coord.lat,coord.lng])
-                  }
-                   
-
-               }
-               else if(count==4){
-                    if(coord.lat == arr[3][0] && coord.lng==arr[3][1]){
-                        marker3.setLatLng([coord.lat, coord.lng]);
-                        route.spliceWaypoints(0,1,[coord.lat,coord.lng])
-                    }
-
-               }
-               else if(count==5){
-                if(coord.lat == arr[4][0] && coord.lng==arr[4][1]){
-                    marker3.setLatLng([coord.lat, coord.lng]);
-                    route.spliceWaypoints(0,1,[coord.lat,coord.lng])
-                }
-
-               }
-                else if(count==6){
-    
-                            
-                            marker3.setLatLng([loc[0][1],loc[0][2]]);
-                            alert("you have reached the destination");
-                           
-                          
-                            
-                            count=0;
-                            
-                   
-                    
-                
-                }
-               
-                
-                
-
-
-
-
-
-            });
-           
-            
-
-        }).addTo(mymap);
-           
-    });
-// L.easyButton('<i class="bi bi-bell-fill">', function(btn, map){
-//     count=count+1;
-//     if(count==1){
-//         route.on('routesfound', function (e) {
-//             console.log(e);
-//             e.routes[0].coordinates.forEach(function (coord, index) {
-//                 // setTimeout(function () {
-//                 //     marker3.setLatLng([coord.lat, coord.lng]);
-//                 // }, 50 * index)
-//                 if(coord.lat == 9.31257 && coord.lng== 77.13389){
-//                     marker3.setLatLng([coord.lat, coord.lng]);
-//                 }
-
-
-//             });
-           
-            
-
-//         }).addTo(mymap);
-
-//     }
-//     else{
-//         mymap.removeRoutingControl();
-//     }
-   
-// }).addTo(mymap );
-//popup function
 function onMasterClick(e) {
     
     var popup = L.popup();

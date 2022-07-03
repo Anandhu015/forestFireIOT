@@ -111,8 +111,8 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
     
 def map_view(request):
-    obj=Sensor_reading.objects.last()
-    return render(request,"map2.html",{"obj":obj})
+    return render(request,"map2.html")
+
 
 
     
@@ -182,7 +182,7 @@ def alert_notify_view(request):
 #mark all notifications
 def send_alert_notify_view(request):
     noti=request.GET['notif']
-    id=request.GET['id']
+    
     
    
        
@@ -190,13 +190,14 @@ def send_alert_notify_view(request):
     notify=alert_notify.objects.get(pk=noti)
     notify.delete()
    
-    return JsonResponse({"device_id":id})
+    return JsonResponse({"bool":"got value"})
 def empty_notify_view(request):
     alert_notify.objects.all().delete() 
     return JsonResponse({"bool":True})
-def weathermap_view(request):
-    return render(request,"weathermap.html")
 
+def alertmap_view(request):
+ 
+    return render(request,"alertmap.html")
 
    
     

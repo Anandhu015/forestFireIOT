@@ -120,6 +120,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 MEDIA_URL='img/'
+
 STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
 TELEGRAM = {
     'bot_token': '5406289795:AAFgockk6PBVqSkdZIBlSQR91menKV7HROI',
