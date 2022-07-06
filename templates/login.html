@@ -1,0 +1,178 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Login and Registration Form Example</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css'><link rel="stylesheet" href="{% static 'css/login.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css" integrity="sha384-eoTu3+HydHRBIjnCVwsFyCpUDZHZSFKEJD0mc3ZqSBSb6YhZzRHeiomAUWCstIWo" crossorigin="anonymous">
+</head>
+<style>
+    body{
+        background-image: url("{% static 'img/coniferous-forest.jpg' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 100%;
+    } 
+    .heading{
+        position: absolute;
+        top:230px;
+        left:450px;
+        font-size: 50px;
+        width:50%;
+    }
+	.nav_icon{
+		margin: 5px;
+		position: absolute; 
+		top:1px;
+		right:1px; 
+		font-size: 2rem;
+		border: none;
+		background: transparent;
+	}
+	.nav_icon:hover{
+		background-color: rgb(188, 178, 178);
+		border-radius: 5px;
+	}
+	li{
+		text-align: center;
+		font-size: 1.5rem;
+	}
+	.btn_item{
+		width: 100%;
+		padding: 15px;
+		border: none;
+		background-color: transparent;
+	}
+	.btn_item:hover{
+		background-color: #222;
+		color: aliceblue;
+	}
+        
+</style>
+        
+
+    
+</style>
+    
+    
+<body>
+	<button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="nav_icon"><i class="bi bi-list"></i></button>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-body p-0">
+    <ul>
+		<li>
+			<button class="btn_item">Home</button></li>
+		<li>
+			<button class="btn_item" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAbout" aria-expanded="false" aria-controls="collapseExample">
+				About
+			  </button>
+			  <div class="collapse" id="collapseAbout">
+				<div class="card card-body">
+				  Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+				</div>
+			  </div>
+		</li>
+		<li>
+			<button class="btn_item" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContact" aria-expanded="false" aria-controls="collapseExample">
+				Contact
+			  </button>
+			  <div class="collapse" id="collapseContact">
+				<div class="card card-body">
+				  Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+				</div>
+			  </div>
+		</li>
+	</ul>
+  </div>
+</div>
+<!-- partial:index.partial.html -->
+
+<h1 class="heading">
+    <span>Forest Fire</span>
+    <div class="message">
+      <div class="word1">Monitoring</div>
+      <div class="word2">And</div>
+      <div class="word3">Detection</div>
+     
+    </div>
+</h1>
+
+	<nav class="main-nav">
+		
+		<ul>
+			<li ><a  class="signin" href="#0">Sign in</a></li>
+			
+		</ul>
+	</nav>
+
+
+<div class="user-modal">
+		<div class="user-modal-container">
+		
+
+			<div id="login">
+				<form class="form" action="homepage " method="POST">
+                    {% csrf_token %}
+					<p class="fieldset">
+						<label class="image-replace email" for="reset-email">E-mail</label>
+						<input class="full-width has-padding has-border" name="email" nid="signin-email" type="text"  required placeholder="E-mail">
+						<span class="error-message">An account with this email does not exist!</span>
+						
+						
+					</p>
+
+					<p class="fieldset">
+						<label class="image-replace password"  for="signin-password" >Password</label>
+						<input class="full-width has-padding has-border" class="pass"  required  name="pass" id="signin-password" type="password"  placeholder="Password">
+						<a href="#" class="hide-password">Show</a>
+						<span class="error-message">Wrong password! Try again.</span>
+                    </p>
+
+					
+						<input class="full-width" type="submit" value="Login">
+					
+				</form>
+				
+				
+				<!-- <p class="form-bottom-message"><a href="#0">Forgot your password?</a></p> -->
+			
+			</div>
+			{% if message %}
+				<script>
+					alert('{{ message }}');
+				</script>
+				{% endif %}
+
+			
+
+			<div id="reset-password">
+				<p class="form-message">Lost your password? Please enter your email address.</br> You will receive a link to create a new password.</p>
+
+				<form class="form">
+					<p class="fieldset">
+						<label class="image-replace email" for="reset-email">E-mail</label>
+						<input class="full-width has-padding has-border" id="reset-email" type="email" placeholder="E-mail">
+						<span class="error-message">An account with this email does not exist!</span>
+					</p>
+
+					<p class="fieldset">
+						<input class="full-width has-padding" type="submit" value="Reset password">
+					</p>
+				</form>
+
+				<p class="form-bottom-message"><a href="">Back to log-in</a></p>
+			</div>
+		
+		</div>
+	</div>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script><script  src="{% static 'js/login.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

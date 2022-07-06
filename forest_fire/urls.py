@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from project.views import  alert_notify_view, alertmap_view, empty_notify_view, send_alert_notify_view,sensor_data_view, map_view,home_view,alert_view,masternode_sensor_view, startpage_view, subnode_sensor_view
+from project.views import  alert_notify_view, alertmap_view, device_id_view, empty_notify_view, home, login, logout, send_alert_notify_view,sensor_data_view, map_view,home_view,alert_view,masternode_sensor_view, startpage_view, subnode_sensor_view
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
@@ -24,7 +24,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home',home_view,name='home'),
+    path('homepage',home_view,name='home_view'),
+    path('home',home,name='home_view'),
     path('readings',sensor_data_view,name='sensor'),
     path('weathermap',map_view,name='map'),
     path('alertmap',alertmap_view,name="alertmap"),
@@ -32,8 +33,13 @@ urlpatterns = [
     path('clearall',empty_notify_view,name="empty_notify"),
     path('masternode',masternode_sensor_view,name='masternode'),
     path('subnode',subnode_sensor_view,name='map2'),
-    path('',startpage_view,name='login'),
+    path('startpage',startpage_view,name='start'),
     path('notify',alert_notify_view,name='alert_notify'),
     path('sendnotify',send_alert_notify_view,name="mark_read_notif"),
+     path('',login,name="login"),
+     path('logout',logout,name="login"),
+     path('device',device_id_view,name="device_id"),
+    
+
 
 ]

@@ -33,9 +33,10 @@
    
    <div class="navbar-one">
      <a href="/home" style="text-decoration: none;color:white">Home</a>
-     <a href="/alertmap"  style="text-decoration: none;color:white">map</a>
+     <a href="/alertmap"  style="text-decoration: none;color:white">Map</a>
+    
      <div class="dropdown-one">
-       <button class="dropbtn-one">Dropdown 
+       <button class="dropbtn-one">Devices
          <i class="fa fa-caret-down"></i>
         
        </button>
@@ -44,7 +45,9 @@
          <a href="/subnode"  style="text-decoration: none;color:rgb(13, 3, 3)">Sub-Node</a>
         
       </div>
+      
      </div>
+     <a href="/logout"  style="text-decoration: none;color:white">logout</a>
      <button  id="drop" style="float:right;border: none; background-color: #333;">
       <div class="dropdown-one" >
         <a href="#" class="notification">
@@ -66,11 +69,11 @@
       </div>   
    </div>
   </div>
-<body>
   <script>
     
   $(function () 
   {
+    
     $("#drop").click(function(){
       
     $("#con").toggle();
@@ -129,6 +132,7 @@
                  
                });
                $(".notify").html(_html);
+               
            
                
                    
@@ -173,8 +177,10 @@
           var _notif=$(this).attr("data-notif");
           $.ajax({
              url: "{% url 'mark_read_notif' %}",
+       
              data:{
               notif:_notif,
+          
            
 
              },
@@ -191,17 +197,45 @@
               // }
              }
             })
+            $.ajax({
+             url: "{% url 'device_id' %}",
+             method:"POST",
+             data:{
+              
+              'device_id':_id
+           
+
+             },
+             dataType: 'json',
+             success: function (res) {
+              console.log("id:"+res.device_id);
+              
+              // if(res.bool==true){
+              //       $(".asif"+_index).removeClass('bg-light');
+                
+              //       $(".marked"+_index).show();
+              //       console.log(res)
+                    
+              // }
+             }
+            })
+           
          
            
          })
         });
               
   </script>
-                 
-                 
+
+
 {% block content %}
     replace me
 
 {% endblock %}
+
+<div id = "content_main">
+
+</div>
+     
 </body>
 </html>

@@ -2,30 +2,78 @@ import datetime
 import os
 import json
 import re
+from wsgiref import headers
+from aiohttp import Payload
 from django.shortcuts import HttpResponse
 import wave
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from gtts import gTTS
 from html5lib import serialize
 from django.core import serializers
 from django.http import JsonResponse
+from requests import session
+
 from .models import Sensor_reading, alert_notify, secondSensor_reading
 import telegram 
 from django.conf import settings
 from pathlib import Path
 import numpy as num
+import pyrebase
 
-from gtts import gTTS
 
+Config = {
+ "apiKey": "AIzaSyD_WKNAk8uWk8fP88nOehfKs6CE9ZvDy4A",
+  "authDomain": "forest-fire-detection-6605a.firebaseapp.com",
+  "databaseURL": "https://forest-fire-detection-6605a-default-rtdb.firebaseio.com",
+  "projectId": "forest-fire-detection-6605a",
+  "storageBucket": "forest-fire-detection-6605a.appspot.com",
+  "messagingSenderId": "2411392518",
+  "appId": "1:2411392518:web:ab0ec58c5c81e1ac485d87",
+  "measurementId": "G-KP4XMVH4CD"
+}
+firebase=pyrebase.initialize_app(Config)
+authe = firebase.auth()
+database=firebase.database()
 
+def login(request):
+    return render(request,"login.html")
 # Create your views here.
 def startpage_view(request):
     return render(request,"frontpage.html")
+def home(request):
+    return render(request,"homepage.html")
 def home_view(request):
-    return render(request,"home.html")
+    email=request.POST.get('email')
+    password=request.POST.get('pass')
+    print(password)
+    print(email)
+    try:
+        # if there is no error then signin the user with given email and password
+        user=authe.sign_in_with_email_and_password(email,password)
+        
+        
+    except:
+        message="Invalid Credentials!!Please ChecK your Data"
+        return render(request,"Login.html",{"message":message})
+    session_id=user['idToken']
+    request.session['uid']=str(session_id)
+    name=email.split('@')
+   
+    del name[1]
+    name=''.join(map(str,name))
+    
+    print(name)
+    return render(request,"homepage.html",{"name":name})
+def logout(request):
+    try:
+        del request.session['uid']
+    except:
+        pass
+    return render(request,"login.html")
 def about_view(request):
     return render(request,"about.html")
+
+
 @csrf_exempt
 def sensor_data_view(request):
     if request.method == 'POST':
@@ -109,9 +157,10 @@ def subnode_sensor_view(request):
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
-    
-def map_view(request):
-    return render(request,"map2.html")
+
+# def map_view(request):
+  
+#     return render(request,"map2.html")
 
 
 
@@ -180,17 +229,19 @@ def alert_notify_view(request):
     
     return JsonResponse({"data":Jsonresponse,"count":count})
 #mark all notifications
+@csrf_exempt
 def send_alert_notify_view(request):
     noti=request.GET['notif']
     
     
-   
-       
-
     notify=alert_notify.objects.get(pk=noti)
     notify.delete()
-   
-    return JsonResponse({"bool":"got value"})
+    # if id ==1:
+    #     return render(request,"map2.html",{"obj":id})
+    # elif id==2:
+    #     return render(request,"map2.html",{"obj":id})
+    # else:
+    return JsonResponse({"obj":"got value"})
 def empty_notify_view(request):
     alert_notify.objects.all().delete() 
     return JsonResponse({"bool":True})
@@ -199,6 +250,29 @@ def alertmap_view(request):
  
     return render(request,"alertmap.html")
 
+
+@csrf_exempt
+def device_id_view(request):
+    id=request.POST.get('device_id')
+    
+    request.session['mapid'] = id
+    # if request.accepts("application/json"):
+        # if id ==1:
+        #     return JsonResponse({"obj":id})
+        # elif id==2:
+        #     return JsonResponse({"obj":id})
+        # else:
+        #     return JsonResponse({"obj":"error"})
+    return JsonResponse({"obj":id})
+        # return render(request,"map2.html",{"obj":id})
+
+
+def map_view(request):
+    id = request.session['mapid']
+    print("id"+id)
+    id=int(id)
+    print(type(id))
+    return render(request,"map2.html",{"id":id})
    
     
    
