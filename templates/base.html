@@ -10,9 +10,8 @@
     "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
         </script>
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
          <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css'>    
-                 
-
          <link rel="stylesheet" href="{% static 'css/home.css'%}">
 </head>    
         
@@ -27,12 +26,13 @@
           display: none;
           color:red;
         }
+       
    </style>
    </head>
    <body>
    
    <div class="navbar-one">
-     <a href="/home" style="text-decoration: none;color:white">Home</a>
+     <a href="/myhomepage" style="text-decoration: none;color:white">Home</a>
      <a href="/alertmap"  style="text-decoration: none;color:white">Map</a>
     
      <div class="dropdown-one">
@@ -48,26 +48,46 @@
       
      </div>
      <a href="/logout"  style="text-decoration: none;color:white">logout</a>
-     <button  id="drop" style="float:right;border: none; background-color: #333;">
-      <div class="dropdown-one" >
+      <button  id="drop" style="float:right;border: none; background-color: #333;">
+      
+      <!-- <div class="dropdown-one" >
         <a href="#" class="notification">
           <i class='bi bi-bell-fill' id="bell" style='color: rgb(255, 255, 255) ;font-size: 20px; margin-right: 13px;'></i>
           <span class="badge" id="badge">0</span>
         </a>
-        <div id="con"  class="dropdown-content-two">
-       
-          <p id="para" class="font-weight-bolder">Notifications (<b id="bold"></b>) </p>
-                <a id="destroy">close all</a>
-          <div class="notify" id="notify">
-              loading...
-              
-  
+      </div> -->
+      </button>
+      <button class="p-0 m-0 border-0 rounded-0 float-end" id="drop" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+        <div class="dropdown-one" >
+          <a href="#" class="notification" >
+            <i class='bi bi-bell-fill' id="bell" style='color: rgb(255, 255, 255) ;font-size: 20px; margin-right: 13px;'></i>
+            <span class="badge" id="badge">0</span>
+          </a>
+        </div>
+      </button>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+          <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel"> <div class="offcanvas-body p-0">
+              <p id="para" class="font-weight-bolder">Notifications (<b id="bold"></b>) </p>
+              <a id="destroy" style="background-color:blue;color:#ffff;cursor:pointer;">close all</a></div></h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
-     </button>
+         
+      <div class="notify" id="notify">
+        <div class="spinner-border text-primary" style="position:absolute ;top:50%;left:50%;" role="status">
+      
+        </div>
         
-        
-      </div>   
+       
+          
+
+      </div>
+          </div>
+        </div>
+          
    </div>
+   
   </div>
   <script>
     
@@ -83,23 +103,7 @@
     });
  
     setInterval(function(){
-        $.ajax({
-        url:"{% url 'alert' %}",
-        dataType: 'json',
-        success: function (data) {
-            // storing json data in variables
-           
-                  console.log(data);
-               
-               
-                   
-         },
-         error: function () 
-         {
-            alert("error receiving  data from server");
-          }
-          
-        });
+        
         $.ajax({
         url:"{% url 'alert_notify' %}",
         dataType: 'json',
@@ -123,7 +127,7 @@
                           
                           if(d.fields.read_by ==false){
                               
-                            _html+= '<a class=" asif bg-light" data-index="'+d.pk+'" device-id="'+d.fields.device_id+'"data-notif="'+d.pk+'" id="button-close" href="/weathermap" style="text-decoration: none;color:rgb(0, 0, 0)'+d.pk+'">'+d.fields.notify_detail+'\
+                            _html+= '<a class=" asif bg-dark w-100" data-index="'+d.pk+'" device-id="'+d.fields.device_id+'"data-notif="'+d.pk+'" id="button-close" href="/weathermap?q=9" style="text-decoration: none;color:rgb(0, 0, 0)'+d.pk+'">'+d.fields.notify_detail+'\
                               <p style="float:right;font-size:15px;margin-top:0px;">"'+d.fields.alert_time+'"</p><button style="float:right;display:none"class="btn btn-sm btn-success marked'+d.pk+'"> <i class="bi bi-check-circle-fill"></i></button></a>';
 
                           }
@@ -147,6 +151,7 @@
         },5000);
         var click=0;
         $(document).on("click","#destroy",function(){
+          
           var _count=0;
           click=click+1;
           $.ajax({
@@ -233,9 +238,7 @@
 
 {% endblock %}
 
-<div id = "content_main">
-
-</div>
      
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 </html>

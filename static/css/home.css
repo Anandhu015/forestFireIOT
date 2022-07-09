@@ -62,12 +62,10 @@
   }
   .notification {
     background-color: #333;
-   
     text-decoration: none;
     padding: 15px 26px;
     position: relative;
     display: inline-block;
-    border-radius: 2px;
   }
   
   .notification:hover {

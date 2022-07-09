@@ -27,7 +27,15 @@ class alert_notify(models.Model):
     notify_detail=models.TextField()
     read_by=models.BooleanField(default=False)
     device_id=models.IntegerField(default=1)
+    
     alert_time=models.TimeField(default=datetime.now())
     
     def __str__(self):
         return(self.notify_detail)
+class node_alert_values(models.Model):
+    device_id=models.IntegerField()
+    temp_reading=models.FloatField(max_length=20)
+    hum_reading=models.FloatField(max_length=20)
+    device_status=models.BooleanField(default=True)
+    gas_analog_reading=models.FloatField(max_length=20)
+

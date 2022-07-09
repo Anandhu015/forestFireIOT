@@ -51,7 +51,7 @@ body{
   }
   
   .main-nav li:nth-child(1) a {
-      background: #000000;
+     
       border: 2px solid #fff;
   }
   .main-nav li:nth-child(1) a:hover {
