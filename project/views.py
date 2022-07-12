@@ -195,7 +195,7 @@ def alert_view(request):
         data=request.body.decode('utf-8')
         dict = json.loads(data)
         now = datetime.datetime.now()
-        time=now.strftime('%I:%M:%S')
+        time=now.strftime("%I:%M:%S")
         print(dict)
         try:
 
@@ -300,7 +300,7 @@ def map_view(request):
     # id=int(id)
     # print(type(id))
     # print(+"This is id")
-    return render(request,"map2.html",{"id":id,"q":request.GET['q']})
+    return render(request,"map2.html",{"id":id,"device_id":request.GET['device_id']})
 
 def graph_view(request):
     return render(request,"graph.html")   

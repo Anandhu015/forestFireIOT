@@ -1,8 +1,10 @@
 from datetime import datetime
+from email.policy import default
 from django.db import models
 from django.utils import timezone
 from sqlalchemy import true
-
+default=datetime.now()
+time=default.strftime("%H:%M:%S")
 # Create your models here.
 class Sensor_reading(models.Model):
     device_id=models.IntegerField()
@@ -28,7 +30,7 @@ class alert_notify(models.Model):
     read_by=models.BooleanField(default=False)
     device_id=models.IntegerField(default=1)
     
-    alert_time=models.TimeField(default=datetime.now())
+    alert_time=models.TimeField(default=time)
     
     def __str__(self):
         return(self.notify_detail)
