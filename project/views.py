@@ -305,6 +305,18 @@ def map_view(request):
 def graph_view(request):
     return render(request,"graph.html")   
     
-   
+def custom_alert_view(request):
+    message=request.GET['message']
+    if message=='':
+        pass
+    else:
+        update="Important update from ADMIN !!!!!!!!!!"
+        
+        update+="\n**************************************\n"
+        
+        telegram_settings1 = settings.TELEGRAM
+        bot1= telegram.Bot(token=telegram_settings1['bot_token'])
+        bot1.send_message(chat_id="@%s" % telegram_settings1['channel_name'],text=update+message, parse_mode=telegram.ParseMode.HTML)
+    return JsonResponse({"hi":message})  
     
   

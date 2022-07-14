@@ -46,7 +46,7 @@
       </div>
       
      </div>
-     <a href="/logout" id="logout"  style="text-decoration: none;color:white">logout</a>
+     <a href="#" id="logout"  style="text-decoration: none;color:white">logout</a>
       <button  id="drop" style="float:right;border: none; background-color: #333;">
       
       <!-- <div class="dropdown-one" >
@@ -74,6 +74,7 @@
           </div>
          
       <div class="notify" id="notify">
+        
         <div class="spinner-border text-primary" style="position:absolute ;top:50%;left:50%;" role="status">
       
         </div>
@@ -89,6 +90,12 @@
    
   </div>
   <script>
+    $('#logout').click(function() {
+  if(confirm("Are you sure you want to log out?")) {
+    //delete here
+    window.location.href = "/logout";
+  }
+});
     
   $(function () 
   {
@@ -150,7 +157,8 @@
         },5000);
         var click=0;
         $(document).on("click","#destroy",function(){
-          
+                    if(confirm("Are you sure? This action all the messages will be delete all notifications")) {
+              //delete here
           var _count=0;
           click=click+1;
           $.ajax({
@@ -169,6 +177,7 @@
                 
              }
             })
+          }
         })
          $(document).on("click","#button-close",function(){
           

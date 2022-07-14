@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from project.views import  alert_notify_view, graph_view, myhomepage,alertmap_view, device_id_view, empty_notify_view, home, login, logout, send_alert_notify_view,sensor_data_view, map_view,home_view,alert_view,masternode_sensor_view, startpage_view, subnode_sensor_view
+from project.views import  alert_notify_view, custom_alert_view, graph_view, myhomepage,alertmap_view, device_id_view, empty_notify_view, home, login, logout, send_alert_notify_view,sensor_data_view, map_view,home_view,alert_view,masternode_sensor_view, startpage_view, subnode_sensor_view
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
@@ -40,7 +40,8 @@ urlpatterns = [
      path('logout',logout,name="login"),
      path('device',device_id_view,name="device_id"),
      path('myhomepage',myhomepage,name="myhomepage"),
-     path("graph",graph_view,name="graph")
+     path("graph",graph_view,name="graph"),
+      path("customalert",custom_alert_view,name="custom_alert")
      
       
     
