@@ -16,11 +16,7 @@
         <link rel="stylesheet" href="{% static 'css/home.css'%}">
         
 <style>
-          body{
-            background-image: url("{% static 'img/home.jpg' %}");
-            background-repeat: no-repeat;
-            background-size:cover;
-        }
+         
         .heading{
         position: absolute;
         top:230px;
@@ -72,20 +68,57 @@ header h1 {
     
     
   }
+  
+  .msg-table{
+    margin-right: 30px;
+    color: #04AA6D;
+    width: 500px;
+    background-color: transparent;
+    margin-left: 500px;
+    height: 400px;
+    margin-top:800px;
+    border-radius: 5%;
+  
+  }
+  #heading{
+    margin-top: 700px;
+  }
+  .active{
+    background-color: transparent;
+  }
+ img{
+  object-fit: cover;
+  width: 80%;
+  height: 80%;
+  margin-left:150px ;
+ }
    </style>
   <link rel=”stylesheet” href=”https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css”/>
    <link rel=”stylesheet” href=”https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css” />
 </head>
 <body>
 
+
       <header>
         <h1>Welcome  {{name}}</h1>
     </header>
+ 
   <!-- send custom messages -->
-	<div class="input-group mb-3">
-    <input type="text" class="form-control" id="input"placeholder="Enter Message"  required aria-label="Recipient's username" aria-describedby="button-addon2">
-    <button class="btn btn-outline-secondary " style="background-color: #31a8e0;" type="button" id="button-addon2"><i class="bi bi-send"></i> </button>
+  <div class="msg-table">
+ <center><h3>Send Custom Messages</h3></center>
+ <br>
+ <br>
+ <div class="input-group mb-3">
+  <input style="height: 100px;"type="text" class="form-control" id="input"placeholder="Enter Message"  required aria-label="Recipient's username" >
+  
+  <button class="btn btn-outline-secondary " style="background-color: #31a8e0;" type="button" id="button-addon2"><i class="bi bi-send"></i> </button>
+</div>
+
   </div>
+ 
+
+
+      
 <script>
 
 
@@ -98,8 +131,8 @@ $("#button-addon2").click(function(){
              success:function(data){
               if(data.hi ==''){
                 console.log(data);
-                var _html='<div class="text-dark bi bi-exclamation-triangle-fill bg-danger alert  alert-dismissible fade show" id="alert_error"  role="alert"><strong>&nbspError! &nbsp</strong>Please enter message<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-                $('body').append(_html);
+                var _html='<div style="width:500px;"class="text-dark bi bi-exclamation-triangle-fill bg-danger alert  alert-dismissible fade show" id="alert_error"  role="alert"><strong>&nbspError! &nbsp</strong>Please enter message<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                $('.msg-table').append(_html);
                 var inter=setInterval(function () {
                   $("#alert_error").fadeTo(500, 0).slideUp(500, function () {
                     $(this).remove();
@@ -113,7 +146,7 @@ $("#button-addon2").click(function(){
               else{
                 console.log(data);
                 var _html='<div class="bi bi-check-circle-fill alert bg-success d-flex align-items-center" role="alert" id="alert_success"><strong>&nbsp Success! &nbsp</strong>&nbsp &nbsp Message send successfully</div>';
-                $('body').append(_html);
+                $('.msg-table').append(_html);
               
                 var inter=setInterval(function () {
                   console.log("success");

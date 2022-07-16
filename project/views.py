@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime,date
 import os
 import json
 import re
@@ -197,6 +197,8 @@ def alert_view(request):
         now = datetime.datetime.now()
         time=now.strftime("%I:%M:%S")
         print(dict)
+        today = date.today()
+        today=today.strftime("%Y-%m-%d")
         try:
 
             id=dict['device_id']
@@ -210,7 +212,7 @@ def alert_view(request):
         
             
                         val=alert_notify.objects.create(notify_detail="Alert!!!!!!"+"\n"+"Device_id:"+str(id), read_by=False,device_id=id,alert_time=time)
-                        alert=node_alert_values.create(device_id=id,temp_reading=temp,hum_reading=hum,device_status=status,gas_analog_reading=smoke)
+                        alert=node_alert_values.create(device_id=id,temp_reading=temp,hum_reading=hum,device_status=status,gas_analog_reading=smoke,alert_time=time,alert_date=today)
                         value1="device_id:"+str(id)+"\n"+"temperature_value:"+str(temp)+"\n"+"humidity_value:"+str(hum)+"\n"+"smoke_sensor_reading:"+str(smoke)+"\n"
                         value1+="location:"+request.get_host()+"/weathermap"+"?q="+id
                         telegram_settings = settings.TELEGRAM
@@ -229,7 +231,7 @@ def alert_view(request):
             if  temp is  not None and hum is not None and smoke is not  None :          
             
                         val=alert_notify.objects.create(notify_detail="Alert!!!!!!"+"\n"+"Device_id:"+str(id), read_by=False,device_id=id,alert_time=time)
-                        alert=node_alert_values.create(device_id=id,temp_reading=temp,hum_reading=hum,device_status=status,gas_analog_reading=smoke)
+                        alert=node_alert_values.create(device_id=id,temp_reading=temp,hum_reading=hum,device_status=status,gas_analog_reading=smoke,alert_time=time,alert_date=today)
                         value="device_id:"+str(id)+"\n"+"temperature_value:"+str(temp)+"\n"+"humidity_value:"+str(hum)+"\n"+"smoke_sensor_reading:"+str(smoke)+"\n"
                         value+="location:"+request.get_host()+"/weathermap"+"?q="+id
                         telegram_settings1 = settings.TELEGRAM
