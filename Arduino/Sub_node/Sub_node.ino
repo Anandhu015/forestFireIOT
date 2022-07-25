@@ -31,8 +31,8 @@ void turn_ON_WIFI() {
 }
 //-------------------------------------
 void sendDataTocentralNode(  String post_request, String resource_path, float humi, float temp, int gassensorAnalog, int gassensorDigital, boolean device_status1) {
-   Serial.println("device_status");
-  Serial.print(device_status1);
+   Serial.print("device_status:");
+  Serial.println(device_status1);
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     String serverPath = post_request + resource_path + "?tmp_value=" + String(temp) + "&hum_value=" + String(humi) + "&gasanalog_value=" + String(gassensorAnalog) + "&gasdigital_value=" + String(gassensorDigital) + "&status=" + String(device_status1);
@@ -52,7 +52,7 @@ void sendDataTocentralNode(  String post_request, String resource_path, float hu
     http.end();
   }
 
-  delay(3000);
+  delay(5000);
 }
 //---------------------------------------------------
 
@@ -80,9 +80,9 @@ void loop() {
   humi = dht.readHumidity();
   temp = dht.readTemperature();
 
-  if (gassensorAnalog > 1000 && temp > 25) {
+  if (gassensorAnalog > 350 && temp > 25) {
    
-    Serial.println("Gas");
+
     Serial.println(gassensorAnalog);
     analogWrite(pin_red, 255);
     analogWrite(pin_green, 0);
@@ -96,16 +96,18 @@ void loop() {
 
   }
   else {
-    Serial.println("No Gas");
+  
     analogWrite(pin_green, 255);
     analogWrite(pin_red, 0);
     delay(1000);
     analogWrite(pin_green, 0);
     analogWrite(pin_red, 0);
-    Serial.println(gassensorAnalog);
+   
 
   }
   delay(100);
+  Serial.print("Gas value from sub-node:");
+  Serial.println(gassensorAnalog);
   boolean device_status1;
   if (isnan(humi) || isnan(temp) || gassensorAnalog == 0) {
     device_status1 = false;
