@@ -148,12 +148,12 @@ var truckIcon = L.icon({
 marker=L.marker([loc[0][1],loc[0][2]],{ icon:  fontAwesomeIcon}).on('click', onMasterClick).addTo(mymap);
 marker1=L.marker([loc[1][1],loc[1][2]],{ icon:  fontAwesomeIcon}).on('click', onSubClick).addTo(mymap);
 marker2=L.marker([loc[2][1],loc[2][2]],{ icon:  facilityIcon}).on('click', onClick).addTo(mymap);
-marker3=L.marker([loc[3][1],loc[3][2]],{icon:truckIcon}).on('click', onClick).addTo(mymap);
+marker3=L.marker([loc[3][1],loc[3][2]],{icon:truckIcon}).addTo(mymap);
 
 
-mymap.on('click',function(e){
-    alert(e.latlng);
-})
+// mymap.on('click',function(e){
+//     alert(e.latlng);
+// })
 if(k ==1){
     var route=L.Routing.control({
 
@@ -756,7 +756,7 @@ function onClick(e) {
                 } else {
                     winddirectionstring = " - currently no winddata available - ";
                 };
-                popup.setContent("FOREST-FIRE FACILITY<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription   + "<br>Temperature: " + temperature +"k <br>Humidityt:" + airhumidity + "%" +"<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "<br>Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
+                popup.setContent("FOREST-FIRE FACILITY<br>" + "<img src=" + weathercondtioniconhtml + "><br>" + "<br>"+ weatherconditionstring + " (Weather-ID: " + weatherconditionid + "): " + weatherconditiondescription   + "<br>Temperature: " + temperaturecelsius +" °C <br>Humidityt:" + airhumidity + "%" +"<br>Airpressure: " + airpressure +"hPa<br>Cloudcoverage: " + cloudcoverage + "%<br><br>Windspeed: " + windspeedkmh + " km/h<br>Wind from direction: " + winddirectionstring + " (" + winddirection + "°)" + "<br>Measure time: " + weathertimenormal + "<br>Weatherstation: " + weatherstationname + "<br>Weatherstation-ID: " + weatherstationid + "<br>Weatherstation Coordinates: " + weatherlocation_lon + ", " + weatherlocation_lat);
                 
                 
             

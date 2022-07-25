@@ -1,7 +1,9 @@
 from datetime import datetime,date
+from math import ceil, floor
 import os
 import json
 import re
+import time
 from wsgiref import headers
 from aiohttp import Payload
 from django.shortcuts import HttpResponse
@@ -194,7 +196,7 @@ def alert_view(request):
        
         data=request.body.decode('utf-8')
         dict = json.loads(data)
-        now = datetime.datetime.now()
+        now = datetime.now()
         time=now.strftime("%I:%M:%S")
         print(dict)
         today = date.today()
@@ -212,9 +214,9 @@ def alert_view(request):
         
             
                         val=alert_notify.objects.create(notify_detail="Alert!!!!!!"+"\n"+"Device_id:"+str(id), read_by=False,device_id=id,alert_time=time)
-                        alert=node_alert_values.create(device_id=id,temp_reading=temp,hum_reading=hum,device_status=status,gas_analog_reading=smoke,alert_time=time,alert_date=today)
+                        alert=node_alert_values.objects.create(device_id=id,temp_reading=temp,hum_reading=hum,device_status=status,gas_analog_reading=smoke,alert_time=time,alert_date=today)
                         value1="device_id:"+str(id)+"\n"+"temperature_value:"+str(temp)+"\n"+"humidity_value:"+str(hum)+"\n"+"smoke_sensor_reading:"+str(smoke)+"\n"
-                        value1+="location:"+request.get_host()+"/weathermap"+"?q="+id
+                        value1+="location:"+request.get_host()+"/weathermap"+"?device_id="+id
                         telegram_settings = settings.TELEGRAM
                         bot = telegram.Bot(token=telegram_settings['bot_token'])
                         bot.send_message(chat_id="@%s" % telegram_settings['channel_name'],
@@ -231,9 +233,9 @@ def alert_view(request):
             if  temp is  not None and hum is not None and smoke is not  None :          
             
                         val=alert_notify.objects.create(notify_detail="Alert!!!!!!"+"\n"+"Device_id:"+str(id), read_by=False,device_id=id,alert_time=time)
-                        alert=node_alert_values.create(device_id=id,temp_reading=temp,hum_reading=hum,device_status=status,gas_analog_reading=smoke,alert_time=time,alert_date=today)
+                        alert=node_alert_values.objects.create(device_id=id,temp_reading=temp,hum_reading=hum,device_status=status,gas_analog_reading=smoke,alert_time=time,alert_date=today)
                         value="device_id:"+str(id)+"\n"+"temperature_value:"+str(temp)+"\n"+"humidity_value:"+str(hum)+"\n"+"smoke_sensor_reading:"+str(smoke)+"\n"
-                        value+="location:"+request.get_host()+"/weathermap"+"?q="+id
+                        value+="location:"+request.get_host()+"/weathermap"+"?device_id="+id
                         telegram_settings1 = settings.TELEGRAM
                         bot1= telegram.Bot(token=telegram_settings1['bot_token'])
                         bot1.send_message(chat_id="@%s" % telegram_settings1['channel_name'],
@@ -305,7 +307,27 @@ def map_view(request):
     return render(request,"map2.html",{"id":id,"device_id":request.GET['device_id']})
 
 def graph_view(request):
-    return render(request,"graph.html")   
+
+    date=node_alert_values.objects.values_list('alert_date',flat=True)
+    time=node_alert_values.objects.values_list('alert_time',flat=True)
+
+    alert_date=[]
+    alert_time=[]
+
+  
+    for i in range(0,len(date)):
+        alert_date.append(date[i])
+        
+        hour=time[i].hour
+       
+
+        alert_time.append(int(time[i].hour))
+
+
+    # date=date.strftime("%m/%d/%Y")
+    # print(date)
+  
+    return render(request,"graph.html",{"date":alert_date,"time":alert_time})   
     
 def custom_alert_view(request):
     message=request.GET['message']

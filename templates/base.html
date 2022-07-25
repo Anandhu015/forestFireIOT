@@ -25,7 +25,12 @@
           display: none;
           color:red;
         }
-       
+        .btn-message{
+    background-color: blue;
+    border: none;
+    
+  }
+  
    </style>
    </head>
    <body>
@@ -46,7 +51,12 @@
       </div>
       
      </div>
-     <a href="#" id="logout"  style="text-decoration: none;color:white">logout</a>
+     <a href="/graph" style="text-decoration: none;color:#ffff">Alert Analysis</a>
+     <button type="button"data-bs-toggle="modal"  style="float:right;border: none; background-color: #333;"data-bs-target="#exampleModal">
+      <a href="#"   style="text-decoration: none;color:white">Logout</a>
+    </button>
+     
+     
       <button  id="drop" style="float:right;border: none; background-color: #333;">
       
       <!-- <div class="dropdown-one" >
@@ -69,7 +79,7 @@
           <div class="offcanvas-header">
             <h5 id="offcanvasRightLabel"> <div class="offcanvas-body p-0">
               <p id="para" class="font-weight-bolder">Notifications (<b id="bold"></b>) </p>
-              <a id="destroy" style="background-color:blue;color:#ffff;cursor:pointer;">close all</a></div></h5>
+              <button class="btn-message" type="button"data-bs-toggle="modal"data-bs-target="#messageModal" style="color:#ffff;cursor:pointer;">close all</button></div></h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
          
@@ -89,12 +99,53 @@
    </div>
    
   </div>
+  
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Are you sure?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       you will be logged out!
+     
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="logout"  class="btn btn-primary">Logout</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Are you sure?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div  id="message-body" class="modal-body">
+       This action will delete all the notifications permanently!
+     
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="destroy"  class="btn btn-primary">Delete All</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       
+      </div>
+    </div>
+  </div>
+</div>
   <script>
     $('#logout').click(function() {
-  if(confirm("Are you sure you want to log out?")) {
+ 
     //delete here
     window.location.href = "/logout";
-  }
+  
 });
     
   $(function () 
@@ -157,7 +208,7 @@
         },5000);
         var click=0;
         $(document).on("click","#destroy",function(){
-                    if(confirm("Are you sure? This action all the messages will be delete all notifications")) {
+                    
               //delete here
           var _count=0;
           click=click+1;
@@ -170,14 +221,14 @@
              success:function(data){
                 console.log(data);
                 if(data.bool==true){
-                  alert("All alerts deleted successfully");
+                  $('#message-body').text("All alerts deleted successfully");
                   
                       
                 }
                 
              }
             })
-          }
+          
         })
          $(document).on("click","#button-close",function(){
           

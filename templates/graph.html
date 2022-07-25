@@ -4,43 +4,87 @@
 <head>
     {% block content %}
     <meta charset="UTF-8">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" 
+    integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g=="
+     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/1.2.1/chartjs-plugin-zoom.min.js" 
+    integrity="sha512-klQv6lz2YR+MecyFYMFRuU2eAl8IPRo6zHnsc9n142TJuJHS8CG0ix4Oq9na9ceeg1u5EkBfZsFcV3U7J51iew==" crossorigin="anonymous" 
+    referrerpolicy="no-referrer"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analysis</title>
 </head>
 <body>
-    <div style="background-color: #fff;">
-        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-    </div>
+    <div >
+        <canvas id="myChart" style="background-color: #fff; margin-left:350px;width:80%;max-width:850px;height:460px;margin-top:10px;"></canvas>
+        <button type="button" class="btn btn-outline-info" onclick="resetZoom()" style="position:absolute;left:70%;top:15%;">Reset Zoom</button>
+      </div>
   
-
-<script>
-var xValues = [100,200,300,400,500,600,700,800,900,1000];
-
-new Chart("myChart", {
-  type: "line",
+    <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+   
+    const dates=[];
+    const time=[];
+    '{% for d in date %}}'
+        dates.push('{{d}}');
+    '{% endfor %}'
+    '{% for d in time %}}'
+        time.push('{{d}}');
+    '{% endfor %}'
+    console.log(time);
+    let coords = dates.map( (v,i) => ({ x: v, y: time[i] }) )
+    console.log(coords)
+    const myChart = new Chart(ctx, {
+  type: 'line',
   data: {
-    labels: xValues,
-    datasets: [{ 
-      data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
-      borderColor: "red",
-      fill: false
-    }, { 
-      data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
-      borderColor: "green",
-      fill: false
-    }, { 
-      data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
-      borderColor: "blue",
-      fill: false
+    labels: dates,
+    datasets: [{
+      label: 'Alert Analysis',
+      pointBackgroundColor: ["red"],
+      data:time,
+      fill: false,
+      borderColor: 'rgb(75, 192, 192)',
+      tension: 0.1
     }]
   },
   options: {
-    legend: {display: false}
+    scales:{
+      yAxes:{
+        beginAtZero:true,
+        min:0,
+
+
+      }
+    },
+    plugins: {
+      zoom: {
+        zoom: {
+          drag:{
+            enabled:true
+          },
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true
+          },
+          mode: 'xy',
+        
+        }
+      }
+    }
   }
-});
-</script>
+
+    });
+    function resetZoom() {
+  myChart.resetZoom();
+}
+    
+
+    </script>
+     
+
     
 </body>
 {% endblock %}

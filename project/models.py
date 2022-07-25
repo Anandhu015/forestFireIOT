@@ -7,6 +7,9 @@ from django.utils import timezone
 from sqlalchemy import true
 default=datetime.now()
 time=default.strftime("%H:%M:%S")
+hour=default.hour
+minute=default.minute
+seconds=default.second
 from datetime import date
 
 alert_date = date.today()
@@ -37,6 +40,7 @@ class alert_notify(models.Model):
     device_id=models.IntegerField(default=1)
     
     alert_time=models.TimeField(default=time)
+   
     
     def __str__(self):
         return(self.notify_detail)
